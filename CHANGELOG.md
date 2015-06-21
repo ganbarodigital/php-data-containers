@@ -4,9 +4,13 @@
 
 Nothing yet.
 
+### Fixes
+
+* Update @link attribute in headers
+
 ## 1.0.1 - Sun Jun 21 2015
 
-### Fixes:
+### Fixes
 
 * Fix package name for Packagist / Composer
 
@@ -14,7 +18,7 @@ Nothing yet.
 
 Initial release.
 
-### New:
+### New
 
 * BaseContainer added
 * LazyValueObject added
