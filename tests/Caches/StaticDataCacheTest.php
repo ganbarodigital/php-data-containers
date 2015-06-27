@@ -48,10 +48,10 @@ use GanbaroDigital\UnitTestHelpers\ClassesAndObjects\InvokeMethod;
 
 // we use these caches for testing the independence of caches
 class CacheTypeA {
-	use StaticDataCache;
+    use StaticDataCache;
 }
 class CacheTypeB {
-	use StaticDataCache;
+    use StaticDataCache;
 }
 
 // we use these caches for testing shared caches
@@ -63,109 +63,109 @@ class CacheTypeASub2 extends CacheTypeA { }
  */
 class StaticDataCacheTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @covers ::getFromCache
-	 * @covers ::setInCache
-	 * @dataProvider provideDataForTheCache
-	 */
-	public function testCanStoreDataInTheCache($key, $expectedValue)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::getFromCache
+     * @covers ::setInCache
+     * @dataProvider provideDataForTheCache
+     */
+    public function testCanStoreDataInTheCache($key, $expectedValue)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $cache = new CacheTypeA;
-	    // make sure the underlying shared cache is EMPTY
-	    InvokeMethod::onString(CacheTypeA::class, 'resetCache');
-	    $this->assertNull(InvokeMethod::onObject($cache, 'getFromCache', [$key]));
+        $cache = new CacheTypeA;
+        // make sure the underlying shared cache is EMPTY
+        InvokeMethod::onString(CacheTypeA::class, 'resetCache');
+        $this->assertNull(InvokeMethod::onObject($cache, 'getFromCache', [$key]));
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    InvokeMethod::onObject($cache, 'setInCache', [$key, $expectedValue]);
+        InvokeMethod::onObject($cache, 'setInCache', [$key, $expectedValue]);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualValue = InvokeMethod::onObject($cache, 'getFromCache', [$key]);
-	    $this->assertEquals($expectedValue, $actualValue);
-	}
+        $actualValue = InvokeMethod::onObject($cache, 'getFromCache', [$key]);
+        $this->assertEquals($expectedValue, $actualValue);
+    }
 
-	/**
-	 * @covers ::getFromCache
-	 * @dataProvider provideDataForTheCache
-	 */
-	public function testReturnsNullIfNotInCache($key, $expectedValue)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::getFromCache
+     * @dataProvider provideDataForTheCache
+     */
+    public function testReturnsNullIfNotInCache($key, $expectedValue)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $cache = new CacheTypeA;
-	    // make sure the underlying shared cache is EMPTY
-	    InvokeMethod::onString(CacheTypeA::class, 'resetCache');
+        $cache = new CacheTypeA;
+        // make sure the underlying shared cache is EMPTY
+        InvokeMethod::onString(CacheTypeA::class, 'resetCache');
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $this->assertNull(InvokeMethod::onObject($cache, 'getFromCache', [$key]));
-	}
+        $this->assertNull(InvokeMethod::onObject($cache, 'getFromCache', [$key]));
+    }
 
-	public function provideDataForTheCache()
-	{
-		return [
-			[ 'name', 'harry' ],
-			[ 'name', 'sally' ],
-			[ 'name', 'fred' ],
-		];
-	}
+    public function provideDataForTheCache()
+    {
+        return [
+            [ 'name', 'harry' ],
+            [ 'name', 'sally' ],
+            [ 'name', 'fred' ],
+        ];
+    }
 
-	/**
-	 * @coversNone
-	 */
-	public function testSupportsIndependentCaches()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @coversNone
+     */
+    public function testSupportsIndependentCaches()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    // make sure we start with a known state
-	    InvokeMethod::onString(CacheTypeA::class, 'resetCache');
-	    InvokeMethod::onString(CacheTypeB::class, 'resetCache');
+        // make sure we start with a known state
+        InvokeMethod::onString(CacheTypeA::class, 'resetCache');
+        InvokeMethod::onString(CacheTypeB::class, 'resetCache');
 
-	    // we expect CacheTypeA to ONLY have these values
-	    $expectedResultsA = [
-	    	'harry',
-	    	'sally',
-	    	'fred'
-	    ];
+        // we expect CacheTypeA to ONLY have these values
+        $expectedResultsA = [
+            'harry',
+            'sally',
+            'fred'
+        ];
 
-	    // we expect CacheTypeB to ONLY have these values
-	    $expectedResultsB = [
-	    	'cod',
-	    	'haddock',
-	    	'trout'
-	    ];
+        // we expect CacheTypeB to ONLY have these values
+        $expectedResultsB = [
+            'cod',
+            'haddock',
+            'trout'
+        ];
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    foreach ($expectedResultsA as $key => $value) {
-	    	InvokeMethod::onString(CacheTypeA::class, 'setInCache', [$key, $value]);
-	    }
-	    foreach ($expectedResultsB as $key => $value) {
-	    	InvokeMethod::onString(CacheTypeB::class, 'setInCache', [$key, $value]);
-	    }
+        foreach ($expectedResultsA as $key => $value) {
+            InvokeMethod::onString(CacheTypeA::class, 'setInCache', [$key, $value]);
+        }
+        foreach ($expectedResultsB as $key => $value) {
+            InvokeMethod::onString(CacheTypeB::class, 'setInCache', [$key, $value]);
+        }
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualResultsA = InvokeMethod::onString(CacheTypeA::class, 'getCache');
-	    $actualResultsB = InvokeMethod::onString(CacheTypeB::class, 'getCache');
+        $actualResultsA = InvokeMethod::onString(CacheTypeA::class, 'getCache');
+        $actualResultsB = InvokeMethod::onString(CacheTypeB::class, 'getCache');
 
-	    $this->assertEquals($expectedResultsA, $actualResultsA);
-	    $this->assertEquals($expectedResultsB, $actualResultsB);
-	}
+        $this->assertEquals($expectedResultsA, $actualResultsA);
+        $this->assertEquals($expectedResultsB, $actualResultsB);
+    }
 
 
 }
