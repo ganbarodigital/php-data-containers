@@ -2,9 +2,15 @@
 
 ## develop branch
 
+### Backwards-Compatibility Breaks
+
+* Moved BaseContainer and LazyValueObject into Containers namespace
+* Moved exceptions into Exceptions namespace
+
 ### New
 
 * Caches\StaticDataCache trait
+* Exceptions\E4xx_DataContainerException added to the hierarchy
 
 ### Fixes
 
