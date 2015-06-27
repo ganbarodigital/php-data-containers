@@ -43,11 +43,49 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
-class E4xx_NoSuchMethod extends E4xx_DataContainerException
+use PHPUnit_Framework_TestCase;
+use RuntimeException;
+
+/**
+ * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\E4xx_DataContainerException
+ */
+class E4xx_DataContainerExceptionTest extends PHPUnit_Framework_TestCase
 {
-    public function __construct($className, $methodName)
+    /**
+     * @covers ::__construct
+     */
+    public function testCanInstantiate()
     {
-        $msg = "no such method '{$methodName}' on class '{$className}'";
-        parent::__construct(400, $msg);
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedCode = 100;
+        $expectedMessage = "hello cruel world";
+
+        $obj = new E4xx_DataContainerException($expectedCode, $expectedMessage);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($obj instanceof E4xx_DataContainerException);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testExtendsExxx_DataContainerException()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedCode = 100;
+        $expectedMessage = "hello cruel world";
+
+        $obj = new E4xx_DataContainerException($expectedCode, $expectedMessage);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($obj instanceof Exxx_DataContainerException);
     }
 }

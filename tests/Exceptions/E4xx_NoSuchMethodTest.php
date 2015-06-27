@@ -71,4 +71,47 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($obj instanceof E4xx_NoSuchMethod);
     }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testInstanceOfE4xx_DataContainerException()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedCode = 400;
+        $className = "AnExampleClass";
+        $methodName = "doSomethingWeirdAndWonderful";
+        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+
+        $obj = new E4xx_NoSuchMethod($expectedCode, $expectedMessage);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($obj instanceof E4xx_DataContainerException);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testInstanceOfExxx_DataContainerException()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $expectedCode = 400;
+        $className = "AnExampleClass";
+        $methodName = "doSomethingWeirdAndWonderful";
+        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+
+        $obj = new E4xx_NoSuchMethod($expectedCode, $expectedMessage);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($obj instanceof Exxx_DataContainerException);
+    }
+
 }
