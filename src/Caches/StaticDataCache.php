@@ -98,7 +98,7 @@ trait StaticDataCache
      *
      * this is mostly provided for unit testing purposes
      *
-     * @return array<string, array>
+     * @return array
      */
     protected static function getCache()
     {
