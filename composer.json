@@ -10,7 +10,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^4.6",
-        "ganbarodigital/php-unit-test-helpers": "dev-develop"
+        "ganbarodigital/php-unit-test-helpers": "^2.0"
     },
     "autoload": {
         "psr-4": {
