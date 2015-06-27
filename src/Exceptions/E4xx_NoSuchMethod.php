@@ -34,21 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   GanbaroDigital/DataContainers
+ * @package   DataContainers/Exceptions
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://code.ganbarodigital.com/php-factfinder
+ * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers;
+namespace GanbaroDigital\DataContainers\Exceptions;
 
-use RuntimeException;
-
-class Exxx_DataContainerException extends RuntimeException
+class E4xx_NoSuchMethod extends E4xx_DataContainerException
 {
-	public function __construct($code, $message)
-	{
-		parent::__construct($message, $code);
-	}
+    public function __construct($className, $methodName)
+    {
+        $msg = "no such method '{$methodName}' on class '{$className}'";
+        parent::__construct(400, $msg);
+    }
 }

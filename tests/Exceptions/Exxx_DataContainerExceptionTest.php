@@ -34,91 +34,39 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   GanbaroDigital/DataContainers
+ * @package   DataContainers/Exceptions
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://code.ganbarodigital.com/php-factfinder
+ * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers;
+namespace GanbaroDigital\DataContainers\Exceptions;
 
-class BaseContainer
+use PHPUnit_Framework_TestCase;
+use RuntimeException;
+
+/**
+ * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\Exxx_DataContainerException
+ */
+class Exxx_DataContainerExceptionTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * the information we are storing
-	 * @var array
-	 */
-	private $data = [];
+    /**
+     * @covers ::__construct
+     */
+    public function testCanInstantiate()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	/**
-	 * retrieve a single piece of information
-	 *
-	 * @param  string $key
-	 *         the information to retrieve
-	 * @return mixed
-	 *         the information found
-	 */
-	protected function getData($key)
-	{
-		if (array_key_exists($key, $this->data)) {
-			return $this->data[$key];
-		}
+        $expectedCode = 100;
+        $expectedMessage = "hello cruel world";
 
-		// if we get here, we do not know anything
-		return null;
-	}
+        $obj = new Exxx_DataContainerException($expectedCode, $expectedMessage);
 
-	/**
-	 * retrieve all of the information we have
-	 *
-	 * @return array
-	 */
-	protected function getAllData()
-	{
-		return $this->data;
-	}
+        // ----------------------------------------------------------------
+        // test the results
 
-	/**
-	 * store a single piece of information
-	 *
-	 * @param string $key
-	 *        the name of this information
-	 * @param mixed $value
-	 *        the information to store
-	 */
-	protected function setData($key, $value)
-	{
-		$this->data[$key] = $value;
-	}
-
-	/**
-	 * do we have a given piece of information?
-	 *
-	 * @param  string $key
-	 *         the information to check for
-	 * @return boolean
-	 *         TRUE if we have the information
-	 *         FALSE otherwise
-	 */
-	protected function hasData($key)
-	{
-		return array_key_exists($key, $this->data);
-	}
-
-	/**
-	 * delete a piece of data (if we have it)
-	 *
-	 * @param  string $key
-	 *         the information to delete
-	 * @return void
-	 */
-	protected function resetData($key)
-	{
-		if (!array_key_exists($key, $this->data)) {
-			return;
-		}
-
-		unset($this->data[$key]);
-	}
+        $this->assertTrue($obj instanceof Exxx_DataContainerException);
+    }
 }

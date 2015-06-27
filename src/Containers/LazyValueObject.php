@@ -34,73 +34,74 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers
+ * @package   DataContainers/Containers
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://code.ganbarodigital.com/php-factfinder
+ * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers;
+namespace GanbaroDigital\DataContainers\Containers;
 
 use JsonSerializable;
 use RuntimeException;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod;
 
 class LazyValueObject extends BaseContainer implements JsonSerializable
 {
-	/** @var array a list of fake operations supported */
-	protected $supportedOperations = [
-		'get'   => 'getData',
-		'has'   => 'hasData',
-		'set'   => 'setData',
-		'reset' => 'resetData',
-	];
+    /** @var array a list of fake operations supported */
+    protected $supportedOperations = [
+        'get'   => 'getData',
+        'has'   => 'hasData',
+        'set'   => 'setData',
+        'reset' => 'resetData',
+    ];
 
-	/**
-	 * make this value object read-only
-	 *
-	 * @return void
-	 */
-	public function makeReadOnly()
-	{
-		unset($this->supportedOperations['set']);
-		unset($this->supportedOperations['reset']);
-	}
+    /**
+     * make this value object read-only
+     *
+     * @return void
+     */
+    public function makeReadOnly()
+    {
+        unset($this->supportedOperations['set']);
+        unset($this->supportedOperations['reset']);
+    }
 
-	/**
-	 * magic method, which provides fake getter / setting support
-	 *
-	 * @param  string $methodName
-	 *         the fake method that was called
-	 * @param  array $args
-	 *         a list of the args that were passed to us
-	 * @return mixed
-	 *         depends on the fake method being called
-	 */
-	public function __call($methodName, $args)
-	{
-		list($verb, $infoName) = $this->convertMethodName($methodName);
+    /**
+     * magic method, which provides fake getter / setting support
+     *
+     * @param  string $methodName
+     *         the fake method that was called
+     * @param  array $args
+     *         a list of the args that were passed to us
+     * @return mixed
+     *         depends on the fake method being called
+     */
+    public function __call($methodName, $args)
+    {
+        list($verb, $infoName) = $this->convertMethodName($methodName);
 
-		if (!isset($this->supportedOperations[$verb])) {
-			throw new E4xx_NoSuchMethod(get_class($this), $methodName);
-		}
+        if (!isset($this->supportedOperations[$verb])) {
+            throw new E4xx_NoSuchMethod(get_class($this), $methodName);
+        }
 
-		$callable   = [ $this, $verb . 'Data'];
-		$argsToPass = array_merge([ $infoName ], $args);
-		return call_user_func_array($callable, $argsToPass);
-	}
+        $callable   = [ $this, $verb . 'Data'];
+        $argsToPass = array_merge([ $infoName ], $args);
+        return call_user_func_array($callable, $argsToPass);
+    }
 
-	/**
-	 * given the 'get/set' kind of method name, convert it into:
-	 *
-	 * 1. the operation being performed (get, set, et al)
-	 * 2. a normalised version of the name of the information
-	 *
-	 * @param  string $methodName the method name to decode
-	 * @return array<string>
-	 */
-	protected function convertMethodName($methodName)
-	{
+    /**
+     * given the 'get/set' kind of method name, convert it into:
+     *
+     * 1. the operation being performed (get, set, et al)
+     * 2. a normalised version of the name of the information
+     *
+     * @param  string $methodName the method name to decode
+     * @return array<string>
+     */
+    protected function convertMethodName($methodName)
+    {
         // turn the method name into an array of words
         $words = explode(' ', preg_replace('/([^A-Z])([A-Z])/', "$1 $2", $methodName));
 
@@ -112,14 +113,14 @@ class LazyValueObject extends BaseContainer implements JsonSerializable
 
         // all done
         return [$verb, $retval];
-	}
+    }
 
-	/**
-	 * returns the data to turn into a JSON data structure
-	 * @return object
-	 */
-	public function jsonSerialize()
-	{
-		return (object)$this->getAllData();
-	}
+    /**
+     * returns the data to turn into a JSON data structure
+     * @return object
+     */
+    public function jsonSerialize()
+    {
+        return (object)$this->getAllData();
+    }
 }

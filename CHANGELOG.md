@@ -4,9 +4,25 @@
 
 Nothing yet.
 
+## 2.0.0 - Sat Jun 27 2015
+
+### Backwards-Compatibility Breaks
+
+* Moved BaseContainer and LazyValueObject into Containers namespace
+* Moved exceptions into Exceptions namespace
+
+### New
+
+* Caches\StaticDataCache trait
+* Exceptions\E4xx_DataContainerException added to the hierarchy
+
+### Fixes
+
+* Update @link attribute in headers
+
 ## 1.0.1 - Sun Jun 21 2015
 
-### Fixes:
+### Fixes
 
 * Fix package name for Packagist / Composer
 
@@ -14,7 +30,7 @@ Nothing yet.
 
 Initial release.
 
-### New:
+### New
 
 * BaseContainer added
 * LazyValueObject added

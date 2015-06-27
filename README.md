@@ -8,12 +8,12 @@ The PHP Data Containers library provides a set of data classes that you can quic
 
 Add this to your `composer.json` file:
 
-{% highlight json $}
+{% highlight json %}
 {
 	"require": {
 		"ganbarodigital/php-data-containers": "^1.0"
 	}
 }
-{% endhighlight $}
+{% endhighlight %}
 
 and then run `composer update`.
