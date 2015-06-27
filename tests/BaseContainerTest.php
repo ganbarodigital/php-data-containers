@@ -44,6 +44,7 @@
 namespace GanbaroDigital\DataContainers;
 
 use PHPUnit_Framework_TestCase;
+use GanbaroDigital\UnitTestHelpers\Objects\InvokeMethod;
 
 /**
  * @coversDefaultClass GanbaroDigital\DataContainers\BaseContainer
@@ -51,23 +52,8 @@ use PHPUnit_Framework_TestCase;
 class BaseContainerTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * Call protected/private method of a class.
-	 *
-	 * @param object &$object    Instantiated object that we will run method on.
-	 * @param string $methodName Method name to call
-	 * @param array  $parameters Array of parameters to pass into method.
-	 *
-	 * @return mixed Method return.
+	 * @coversNone
 	 */
-	public function invokeMethod(&$object, $methodName, array $parameters = array())
-	{
-	    $reflection = new \ReflectionClass(get_class($object));
-	    $method = $reflection->getMethod($methodName);
-	    $method->setAccessible(true);
-
-	    return $method->invokeArgs($object, $parameters);
-	}
-
 	public function testCanInstantiate()
 	{
 		$obj = new BaseContainer;
@@ -89,12 +75,12 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $this->invokeMethod($obj, 'setData', [ $dataName, $expectedData ]);
+	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = $this->invokeMethod($obj, 'getData', [ $dataName ]);
+	    $actualData = InvokeMethod::onObject($obj, 'getData', [ $dataName ]);
 	    $this->assertEquals($expectedData, $actualData);
 	}
 
@@ -122,7 +108,7 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = $this->invokeMethod($obj, 'getData', [ 'Value' ]);
+	    $actualData = InvokeMethod::onObject($obj, 'getData', [ 'Value' ]);
 	    $this->assertNull($actualData);
 	}
 
@@ -145,13 +131,13 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    // perform the change
 
 	    foreach ($expectedData as $key => $value) {
-		    $this->invokeMethod($obj, 'setData', [ $key, $value ]);
+		    InvokeMethod::onObject($obj, 'setData', [ $key, $value ]);
 		}
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = $this->invokeMethod($obj, 'getAllData');
+	    $actualData = InvokeMethod::onObject($obj, 'getAllData');
 	    $this->assertEquals($expectedData, $actualData);
 	}
 
@@ -170,16 +156,16 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    // perform the change
 
 	    // make sure we do not have this data first
-	    $actualData = $this->invokeMethod($obj, 'hasData', [ $dataName ]);
+	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
 	    $this->assertFalse($actualData);
 
 	    // add the data
-	    $this->invokeMethod($obj, 'setData', [ $dataName, $expectedData ]);
+	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = $this->invokeMethod($obj, 'hasData', [ $dataName ]);
+	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
 	    $this->assertTrue($actualData);
 	}
 
@@ -195,21 +181,21 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    $obj = new BaseContainer;
 
 	    // add the data
-	    $this->invokeMethod($obj, 'setData', [ $dataName, $expectedData ]);
+	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
 
 	    // make sure the data is now there
-	    $actualData = $this->invokeMethod($obj, 'hasData', [ $dataName ]);
+	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
 	    $this->assertTrue($actualData);
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $this->invokeMethod($obj, 'resetData', [ $dataName ]);
+	    InvokeMethod::onObject($obj, 'resetData', [ $dataName ]);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = $this->invokeMethod($obj, 'hasData', [ $dataName ]);
+	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
 	    $this->assertFalse($actualData);
 	}
 
@@ -227,12 +213,12 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    $this->invokeMethod($obj, 'resetData', [ $dataName ]);
+	    InvokeMethod::onObject($obj, 'resetData', [ $dataName ]);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = $this->invokeMethod($obj, 'hasData', [ $dataName ]);
+	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
 	    $this->assertFalse($actualData);
 	}
 
