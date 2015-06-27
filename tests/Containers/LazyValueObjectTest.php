@@ -50,179 +50,179 @@ use PHPUnit_Framework_TestCase;
  */
 class LazyValueObjectTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @coversNone
-	 */
-	public function testCanInstantiate()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @coversNone
+     */
+    public function testCanInstantiate()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new LazyValueObject;
+        $obj = new LazyValueObject;
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $this->assertTrue($obj instanceof LazyValueObject);
-	}
+        $this->assertTrue($obj instanceof LazyValueObject);
+    }
 
-	/**
-	 * @covers ::__call
-	 * @covers ::convertMethodName
-	 * @dataProvider getAndSetDataProvider
-	 */
-	public function testCanGetAndSetData($dataName, $expectedData)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::__call
+     * @covers ::convertMethodName
+     * @dataProvider getAndSetDataProvider
+     */
+    public function testCanGetAndSetData($dataName, $expectedData)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new LazyValueObject;
+        $obj = new LazyValueObject;
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    $obj->{'set' . $dataName }($expectedData);
+        $obj->{'set' . $dataName }($expectedData);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = $obj->{'get' . $dataName }();
-	    $this->assertEquals($expectedData, $actualData);
-	}
+        $actualData = $obj->{'get' . $dataName }();
+        $this->assertEquals($expectedData, $actualData);
+    }
 
-	public function getAndSetDataProvider()
-	{
-		return [
-			[ 'Value1', true ],
-			[ 'Value2', false ]
-		];
-	}
+    public function getAndSetDataProvider()
+    {
+        return [
+            [ 'Value1', true ],
+            [ 'Value2', false ]
+        ];
+    }
 
-	/**
-	 * @covers ::__call
-	 * @dataProvider getAndSetDataProvider
-	 */
-	public function testCanCheckDataExists($dataName, $expectedData)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::__call
+     * @dataProvider getAndSetDataProvider
+     */
+    public function testCanCheckDataExists($dataName, $expectedData)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new LazyValueObject;
+        $obj = new LazyValueObject;
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    $actualData = $obj->{'has' . $dataName}();
-	    $this->assertFalse($actualData);
-	    $obj->{'set' . $dataName}($expectedData);
+        $actualData = $obj->{'has' . $dataName}();
+        $this->assertFalse($actualData);
+        $obj->{'set' . $dataName}($expectedData);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = $obj->{'has' . $dataName}();
-	    $this->assertTrue($actualData);
-	}
+        $actualData = $obj->{'has' . $dataName}();
+        $this->assertTrue($actualData);
+    }
 
-	/**
-	 * @covers ::__call
-	 * @dataProvider getAndSetDataProvider
-	 */
-	public function testCanRemoveData($dataName, $expectedData)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::__call
+     * @dataProvider getAndSetDataProvider
+     */
+    public function testCanRemoveData($dataName, $expectedData)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new LazyValueObject;
+        $obj = new LazyValueObject;
 
-	    $actualData = $obj->{'has' . $dataName}();
-	    $this->assertFalse($actualData);
-	    $obj->{'set' . $dataName}($expectedData);
+        $actualData = $obj->{'has' . $dataName}();
+        $this->assertFalse($actualData);
+        $obj->{'set' . $dataName}($expectedData);
 
-	    $actualData = $obj->{'has' . $dataName}();
-	    $this->assertTrue($actualData);
+        $actualData = $obj->{'has' . $dataName}();
+        $this->assertTrue($actualData);
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    $obj->{'reset' . $dataName}();
+        $obj->{'reset' . $dataName}();
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = $obj->{'has' . $dataName}();
-	    $this->assertFalse($actualData);
-	}
+        $actualData = $obj->{'has' . $dataName}();
+        $this->assertFalse($actualData);
+    }
 
-	/**
-	 * @covers ::__call
-	 * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
-	 */
-	public function testThrowsExceptionWhenUnsupportedMethodCalled()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::__call
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
+     */
+    public function testThrowsExceptionWhenUnsupportedMethodCalled()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new LazyValueObject;
+        $obj = new LazyValueObject;
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    $obj->doSomethingWeirdAndWonderful();
-	}
+        $obj->doSomethingWeirdAndWonderful();
+    }
 
-	/**
-	 * @covers ::__call
-	 * @covers ::makeReadOnly
-	 * @dataProvider getAndSetDataProvider
-	 * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
-	 */
-	public function testCanMakeReadOnly($dataName, $expectedData)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::__call
+     * @covers ::makeReadOnly
+     * @dataProvider getAndSetDataProvider
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
+     */
+    public function testCanMakeReadOnly($dataName, $expectedData)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new LazyValueObject;
-	    $obj->{'set' . $dataName }($expectedData);
+        $obj = new LazyValueObject;
+        $obj->{'set' . $dataName }($expectedData);
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    $obj->makeReadOnly();
+        $obj->makeReadOnly();
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    // this will trigger the exception
-	    $obj->{'set' . $dataName }($expectedData);
-	}
+        // this will trigger the exception
+        $obj->{'set' . $dataName }($expectedData);
+    }
 
-	/**
-	 * @covers ::jsonSerialize
-	 */
-	public function testCanJsonEncode()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::jsonSerialize
+     */
+    public function testCanJsonEncode()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new LazyValueObject;
+        $obj = new LazyValueObject;
 
-	    $rawData = [
-	    	"Value1" => 100,
-	    	"Value2" => 200,
-	    ];
-	    $expectedData = json_encode($rawData);
+        $rawData = [
+            "Value1" => 100,
+            "Value2" => 200,
+        ];
+        $expectedData = json_encode($rawData);
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    foreach ($rawData as $key => $value) {
-		    $obj->{'set' . $key}($value);
-		}
+        foreach ($rawData as $key => $value) {
+            $obj->{'set' . $key}($value);
+        }
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = json_encode($obj);
-	    $this->assertEquals($expectedData, $actualData);
-	}
+        $actualData = json_encode($obj);
+        $this->assertEquals($expectedData, $actualData);
+    }
 }

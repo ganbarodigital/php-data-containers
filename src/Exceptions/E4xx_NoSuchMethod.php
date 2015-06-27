@@ -45,9 +45,9 @@ namespace GanbaroDigital\DataContainers\Exceptions;
 
 class E4xx_NoSuchMethod extends Exxx_DataContainerException
 {
-	public function __construct($className, $methodName)
-	{
-		$msg = "no such method '{$methodName}' on class '{$className}'";
-		parent::__construct(400, $msg);
-	}
+    public function __construct($className, $methodName)
+    {
+        $msg = "no such method '{$methodName}' on class '{$className}'";
+        parent::__construct(400, $msg);
+    }
 }

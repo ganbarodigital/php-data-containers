@@ -51,22 +51,22 @@ use RuntimeException;
  */
 class Exxx_DataContainerExceptionTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @covers ::__construct
-	 */
-	public function testCanInstantiate()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::__construct
+     */
+    public function testCanInstantiate()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-		$expectedCode = 100;
-		$expectedMessage = "hello cruel world";
+        $expectedCode = 100;
+        $expectedMessage = "hello cruel world";
 
-	    $obj = new Exxx_DataContainerException($expectedCode, $expectedMessage);
+        $obj = new Exxx_DataContainerException($expectedCode, $expectedMessage);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $this->assertTrue($obj instanceof Exxx_DataContainerException);
-	}
+        $this->assertTrue($obj instanceof Exxx_DataContainerException);
+    }
 }

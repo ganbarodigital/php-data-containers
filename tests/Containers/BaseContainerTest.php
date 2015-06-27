@@ -51,175 +51,175 @@ use GanbaroDigital\UnitTestHelpers\ClassesAndObjects\InvokeMethod;
  */
 class BaseContainerTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @coversNone
-	 */
-	public function testCanInstantiate()
-	{
-		$obj = new BaseContainer;
-		$this->assertTrue($obj instanceof BaseContainer);
-	}
+    /**
+     * @coversNone
+     */
+    public function testCanInstantiate()
+    {
+        $obj = new BaseContainer;
+        $this->assertTrue($obj instanceof BaseContainer);
+    }
 
-	/**
-	 * @covers ::getData
-	 * @covers ::setData
-	 * @dataProvider getAndSetDataProvider
-	 */
-	public function testCanGetAndSetData($dataName, $expectedData)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::getData
+     * @covers ::setData
+     * @dataProvider getAndSetDataProvider
+     */
+    public function testCanGetAndSetData($dataName, $expectedData)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new BaseContainer;
+        $obj = new BaseContainer;
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
+        InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'getData', [ $dataName ]);
-	    $this->assertEquals($expectedData, $actualData);
-	}
+        $actualData = InvokeMethod::onObject($obj, 'getData', [ $dataName ]);
+        $this->assertEquals($expectedData, $actualData);
+    }
 
-	public function getAndSetDataProvider()
-	{
-		return [
-			[ 'Value', true ],
-			[ 'Value', false ],
-		];
-	}
+    public function getAndSetDataProvider()
+    {
+        return [
+            [ 'Value', true ],
+            [ 'Value', false ],
+        ];
+    }
 
-	/**
-	 * @covers ::getData
-	 */
-	public function testReturnsNullWhenDataNotFound()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::getData
+     */
+    public function testReturnsNullWhenDataNotFound()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new BaseContainer;
+        $obj = new BaseContainer;
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'getData', [ 'Value' ]);
-	    $this->assertNull($actualData);
-	}
+        $actualData = InvokeMethod::onObject($obj, 'getData', [ 'Value' ]);
+        $this->assertNull($actualData);
+    }
 
-	/**
-	 * @covers ::getAllData
-	 */
-	public function testCanGetAllData()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::getAllData
+     */
+    public function testCanGetAllData()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new BaseContainer;
+        $obj = new BaseContainer;
 
-	    $expectedData = [
-	    	"Value1" => 100,
-	    	"Value2" => 200,
-	    ];
+        $expectedData = [
+            "Value1" => 100,
+            "Value2" => 200,
+        ];
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    foreach ($expectedData as $key => $value) {
-		    InvokeMethod::onObject($obj, 'setData', [ $key, $value ]);
-		}
+        foreach ($expectedData as $key => $value) {
+            InvokeMethod::onObject($obj, 'setData', [ $key, $value ]);
+        }
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'getAllData');
-	    $this->assertEquals($expectedData, $actualData);
-	}
+        $actualData = InvokeMethod::onObject($obj, 'getAllData');
+        $this->assertEquals($expectedData, $actualData);
+    }
 
-	/**
-	 * @covers ::hasData
-	 * @dataProvider getAndSetDataProvider
-	 */
-	public function testCanCheckDataExists($dataName, $expectedData)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::hasData
+     * @dataProvider getAndSetDataProvider
+     */
+    public function testCanCheckDataExists($dataName, $expectedData)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new BaseContainer;
+        $obj = new BaseContainer;
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    // make sure we do not have this data first
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
-	    $this->assertFalse($actualData);
+        // make sure we do not have this data first
+        $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+        $this->assertFalse($actualData);
 
-	    // add the data
-	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
+        // add the data
+        InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
-	    $this->assertTrue($actualData);
-	}
+        $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+        $this->assertTrue($actualData);
+    }
 
-	/**
-	 * @covers ::resetData
-	 * @dataProvider getAndSetDataProvider
-	 */
-	public function testCanRemoveData($dataName, $expectedData)
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::resetData
+     * @dataProvider getAndSetDataProvider
+     */
+    public function testCanRemoveData($dataName, $expectedData)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new BaseContainer;
+        $obj = new BaseContainer;
 
-	    // add the data
-	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
+        // add the data
+        InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
 
-	    // make sure the data is now there
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
-	    $this->assertTrue($actualData);
+        // make sure the data is now there
+        $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+        $this->assertTrue($actualData);
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    InvokeMethod::onObject($obj, 'resetData', [ $dataName ]);
+        InvokeMethod::onObject($obj, 'resetData', [ $dataName ]);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
-	    $this->assertFalse($actualData);
-	}
+        $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+        $this->assertFalse($actualData);
+    }
 
-	/**
-	 * @covers ::resetData
-	 */
-	public function testNothingHappensWhenRemovingDataThatDoesNotExist()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::resetData
+     */
+    public function testNothingHappensWhenRemovingDataThatDoesNotExist()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-	    $obj = new BaseContainer;
-	    $dataName = 'Value1';
+        $obj = new BaseContainer;
+        $dataName = 'Value1';
 
-	    // ----------------------------------------------------------------
-	    // perform the change
+        // ----------------------------------------------------------------
+        // perform the change
 
-	    InvokeMethod::onObject($obj, 'resetData', [ $dataName ]);
+        InvokeMethod::onObject($obj, 'resetData', [ $dataName ]);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
-	    $this->assertFalse($actualData);
-	}
+        $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+        $this->assertFalse($actualData);
+    }
 
 }

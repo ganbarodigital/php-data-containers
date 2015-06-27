@@ -45,80 +45,80 @@ namespace GanbaroDigital\DataContainers\Containers;
 
 class BaseContainer
 {
-	/**
-	 * the information we are storing
-	 * @var array
-	 */
-	private $data = [];
+    /**
+     * the information we are storing
+     * @var array
+     */
+    private $data = [];
 
-	/**
-	 * retrieve a single piece of information
-	 *
-	 * @param  string $key
-	 *         the information to retrieve
-	 * @return mixed
-	 *         the information found
-	 */
-	protected function getData($key)
-	{
-		if (array_key_exists($key, $this->data)) {
-			return $this->data[$key];
-		}
+    /**
+     * retrieve a single piece of information
+     *
+     * @param  string $key
+     *         the information to retrieve
+     * @return mixed
+     *         the information found
+     */
+    protected function getData($key)
+    {
+        if (array_key_exists($key, $this->data)) {
+            return $this->data[$key];
+        }
 
-		// if we get here, we do not know anything
-		return null;
-	}
+        // if we get here, we do not know anything
+        return null;
+    }
 
-	/**
-	 * retrieve all of the information we have
-	 *
-	 * @return array
-	 */
-	protected function getAllData()
-	{
-		return $this->data;
-	}
+    /**
+     * retrieve all of the information we have
+     *
+     * @return array
+     */
+    protected function getAllData()
+    {
+        return $this->data;
+    }
 
-	/**
-	 * store a single piece of information
-	 *
-	 * @param string $key
-	 *        the name of this information
-	 * @param mixed $value
-	 *        the information to store
-	 */
-	protected function setData($key, $value)
-	{
-		$this->data[$key] = $value;
-	}
+    /**
+     * store a single piece of information
+     *
+     * @param string $key
+     *        the name of this information
+     * @param mixed $value
+     *        the information to store
+     */
+    protected function setData($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
 
-	/**
-	 * do we have a given piece of information?
-	 *
-	 * @param  string $key
-	 *         the information to check for
-	 * @return boolean
-	 *         TRUE if we have the information
-	 *         FALSE otherwise
-	 */
-	protected function hasData($key)
-	{
-		return array_key_exists($key, $this->data);
-	}
+    /**
+     * do we have a given piece of information?
+     *
+     * @param  string $key
+     *         the information to check for
+     * @return boolean
+     *         TRUE if we have the information
+     *         FALSE otherwise
+     */
+    protected function hasData($key)
+    {
+        return array_key_exists($key, $this->data);
+    }
 
-	/**
-	 * delete a piece of data (if we have it)
-	 *
-	 * @param  string $key
-	 *         the information to delete
-	 * @return void
-	 */
-	protected function resetData($key)
-	{
-		if (!array_key_exists($key, $this->data)) {
-			return;
-		}
+    /**
+     * delete a piece of data (if we have it)
+     *
+     * @param  string $key
+     *         the information to delete
+     * @return void
+     */
+    protected function resetData($key)
+    {
+        if (!array_key_exists($key, $this->data)) {
+            return;
+        }
 
-		unset($this->data[$key]);
-	}
+        unset($this->data[$key]);
+    }
 }

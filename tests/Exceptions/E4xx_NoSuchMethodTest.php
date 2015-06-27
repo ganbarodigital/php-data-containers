@@ -51,24 +51,24 @@ use RuntimeException;
  */
 class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @covers ::__construct
-	 */
-	public function testCanInstantiate()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
+    /**
+     * @covers ::__construct
+     */
+    public function testCanInstantiate()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
 
-		$expectedCode = 400;
-		$className = "AnExampleClass";
-		$methodName = "doSomethingWeirdAndWonderful";
-		$expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $expectedCode = 400;
+        $className = "AnExampleClass";
+        $methodName = "doSomethingWeirdAndWonderful";
+        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
 
-	    $obj = new E4xx_NoSuchMethod($expectedCode, $expectedMessage);
+        $obj = new E4xx_NoSuchMethod($expectedCode, $expectedMessage);
 
-	    // ----------------------------------------------------------------
-	    // test the results
+        // ----------------------------------------------------------------
+        // test the results
 
-	    $this->assertTrue($obj instanceof E4xx_NoSuchMethod);
-	}
+        $this->assertTrue($obj instanceof E4xx_NoSuchMethod);
+    }
 }
