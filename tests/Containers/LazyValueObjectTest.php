@@ -34,35 +34,41 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   GanbaroDigital/DataContainers
+ * @package   DataContainers/Containers
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers;
+namespace GanbaroDigital\DataContainers\Containers;
 
 use PHPUnit_Framework_TestCase;
-use GanbaroDigital\UnitTestHelpers\ClassesAndObjects\InvokeMethod;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\BaseContainer
+ * @coversDefaultClass GanbaroDigital\DataContainers\Containers\LazyValueObject
  */
-class BaseContainerTest extends PHPUnit_Framework_TestCase
+class LazyValueObjectTest extends PHPUnit_Framework_TestCase
 {
 	/**
 	 * @coversNone
 	 */
 	public function testCanInstantiate()
 	{
-		$obj = new BaseContainer;
-		$this->assertTrue($obj instanceof BaseContainer);
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new LazyValueObject;
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $this->assertTrue($obj instanceof LazyValueObject);
 	}
 
 	/**
-	 * @covers ::getData
-	 * @covers ::setData
+	 * @covers ::__call
+	 * @covers ::convertMethodName
 	 * @dataProvider getAndSetDataProvider
 	 */
 	public function testCanGetAndSetData($dataName, $expectedData)
@@ -70,79 +76,30 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $obj = new BaseContainer;
+	    $obj = new LazyValueObject;
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
+	    $obj->{'set' . $dataName }($expectedData);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'getData', [ $dataName ]);
+	    $actualData = $obj->{'get' . $dataName }();
 	    $this->assertEquals($expectedData, $actualData);
 	}
 
 	public function getAndSetDataProvider()
 	{
 		return [
-			[ 'Value', true ],
-			[ 'Value', false ],
+			[ 'Value1', true ],
+			[ 'Value2', false ]
 		];
 	}
 
 	/**
-	 * @covers ::getData
-	 */
-	public function testReturnsNullWhenDataNotFound()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
-
-	    $obj = new BaseContainer;
-
-	    // ----------------------------------------------------------------
-	    // perform the change
-
-	    // ----------------------------------------------------------------
-	    // test the results
-
-	    $actualData = InvokeMethod::onObject($obj, 'getData', [ 'Value' ]);
-	    $this->assertNull($actualData);
-	}
-
-	/**
-	 * @covers ::getAllData
-	 */
-	public function testCanGetAllData()
-	{
-	    // ----------------------------------------------------------------
-	    // setup your test
-
-	    $obj = new BaseContainer;
-
-	    $expectedData = [
-	    	"Value1" => 100,
-	    	"Value2" => 200,
-	    ];
-
-	    // ----------------------------------------------------------------
-	    // perform the change
-
-	    foreach ($expectedData as $key => $value) {
-		    InvokeMethod::onObject($obj, 'setData', [ $key, $value ]);
-		}
-
-	    // ----------------------------------------------------------------
-	    // test the results
-
-	    $actualData = InvokeMethod::onObject($obj, 'getAllData');
-	    $this->assertEquals($expectedData, $actualData);
-	}
-
-	/**
-	 * @covers ::hasData
+	 * @covers ::__call
 	 * @dataProvider getAndSetDataProvider
 	 */
 	public function testCanCheckDataExists($dataName, $expectedData)
@@ -150,27 +107,24 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $obj = new BaseContainer;
+	    $obj = new LazyValueObject;
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    // make sure we do not have this data first
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+	    $actualData = $obj->{'has' . $dataName}();
 	    $this->assertFalse($actualData);
-
-	    // add the data
-	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
+	    $obj->{'set' . $dataName}($expectedData);
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+	    $actualData = $obj->{'has' . $dataName}();
 	    $this->assertTrue($actualData);
 	}
 
 	/**
-	 * @covers ::resetData
+	 * @covers ::__call
 	 * @dataProvider getAndSetDataProvider
 	 */
 	public function testCanRemoveData($dataName, $expectedData)
@@ -178,48 +132,97 @@ class BaseContainerTest extends PHPUnit_Framework_TestCase
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $obj = new BaseContainer;
+	    $obj = new LazyValueObject;
 
-	    // add the data
-	    InvokeMethod::onObject($obj, 'setData', [ $dataName, $expectedData ]);
+	    $actualData = $obj->{'has' . $dataName}();
+	    $this->assertFalse($actualData);
+	    $obj->{'set' . $dataName}($expectedData);
 
-	    // make sure the data is now there
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+	    $actualData = $obj->{'has' . $dataName}();
 	    $this->assertTrue($actualData);
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    InvokeMethod::onObject($obj, 'resetData', [ $dataName ]);
+	    $obj->{'reset' . $dataName}();
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
+	    $actualData = $obj->{'has' . $dataName}();
 	    $this->assertFalse($actualData);
 	}
 
 	/**
-	 * @covers ::resetData
+	 * @covers ::__call
+	 * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
 	 */
-	public function testNothingHappensWhenRemovingDataThatDoesNotExist()
+	public function testThrowsExceptionWhenUnsupportedMethodCalled()
 	{
 	    // ----------------------------------------------------------------
 	    // setup your test
 
-	    $obj = new BaseContainer;
-	    $dataName = 'Value1';
+	    $obj = new LazyValueObject;
 
 	    // ----------------------------------------------------------------
 	    // perform the change
 
-	    InvokeMethod::onObject($obj, 'resetData', [ $dataName ]);
+	    $obj->doSomethingWeirdAndWonderful();
+	}
+
+	/**
+	 * @covers ::__call
+	 * @covers ::makeReadOnly
+	 * @dataProvider getAndSetDataProvider
+	 * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
+	 */
+	public function testCanMakeReadOnly($dataName, $expectedData)
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new LazyValueObject;
+	    $obj->{'set' . $dataName }($expectedData);
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    $obj->makeReadOnly();
 
 	    // ----------------------------------------------------------------
 	    // test the results
 
-	    $actualData = InvokeMethod::onObject($obj, 'hasData', [ $dataName ]);
-	    $this->assertFalse($actualData);
+	    // this will trigger the exception
+	    $obj->{'set' . $dataName }($expectedData);
 	}
 
+	/**
+	 * @covers ::jsonSerialize
+	 */
+	public function testCanJsonEncode()
+	{
+	    // ----------------------------------------------------------------
+	    // setup your test
+
+	    $obj = new LazyValueObject;
+
+	    $rawData = [
+	    	"Value1" => 100,
+	    	"Value2" => 200,
+	    ];
+	    $expectedData = json_encode($rawData);
+
+	    // ----------------------------------------------------------------
+	    // perform the change
+
+	    foreach ($rawData as $key => $value) {
+		    $obj->{'set' . $key}($value);
+		}
+
+	    // ----------------------------------------------------------------
+	    // test the results
+
+	    $actualData = json_encode($obj);
+	    $this->assertEquals($expectedData, $actualData);
+	}
 }
