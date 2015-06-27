@@ -48,7 +48,7 @@ trait StaticDataCache
     /**
      * our cached data
      *
-     * @var array<string|int|double, mixed>
+     * @var array
      */
     protected static $cachedData = [];
 
