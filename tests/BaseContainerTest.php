@@ -44,7 +44,7 @@
 namespace GanbaroDigital\DataContainers;
 
 use PHPUnit_Framework_TestCase;
-use GanbaroDigital\UnitTestHelpers\Objects\InvokeMethod;
+use GanbaroDigital\UnitTestHelpers\ClassesAndObjects\InvokeMethod;
 
 /**
  * @coversDefaultClass GanbaroDigital\DataContainers\BaseContainer
