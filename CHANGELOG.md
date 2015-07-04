@@ -4,6 +4,13 @@
 
 Nothing yet.
 
+## 2.0.1 - Sat Jul 4 2015
+
+### Fixed
+
+* Wrong type hints in docblock for StaticDataCache::getFromCache()
+* Wrong type hints in docblock for StaticDataCache::setInCache()
+
 ## 2.0.0 - Sat Jun 27 2015
 
 ### Backwards-Compatibility Breaks
