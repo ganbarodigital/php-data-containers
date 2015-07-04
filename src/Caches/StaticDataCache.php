@@ -57,7 +57,7 @@ trait StaticDataCache
      *
      * @param  string|int|double $key
      *         the index to search for
-     * @return array|null
+     * @return mixed|null
      */
     protected static function getFromCache($key)
     {
@@ -73,8 +73,8 @@ trait StaticDataCache
      *
      * @param string|int|double $key
      *        the data key to store information about
-     * @param array $data
-     *        the list of key(s) that this item can be
+     * @param mixed $data
+     *        the data to store in the cache
      */
     protected static function setInCache($key, $data)
     {
