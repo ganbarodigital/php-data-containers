@@ -94,7 +94,7 @@ class ShouldOverwrite
         if (IsIndexable::checkMixed($ours)) {
             return self::intoArray($ours, $property, $theirs);
         }
-        if (IsAssignable::checkMixed($ours, $property, $theirs)) {
+        if (IsAssignable::checkMixed($ours)) {
             return self::intoObject($ours, $property, $theirs);
         }
 
