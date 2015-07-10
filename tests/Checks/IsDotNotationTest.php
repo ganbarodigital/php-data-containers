@@ -44,6 +44,7 @@
 namespace GanbaroDigital\DataContainers\Checks;
 
 use PHPUnit_Framework_TestCase;
+use stdClass;
 
 /**
  * @coversDefaultClass GanbaroDigital\DataContainers\Checks\IsDotNotation
@@ -152,4 +153,33 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($isNotDotNotation);
     }
 
+    /**
+     * @covers ::inString
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     * @dataProvider provideNonStrings
+     */
+    public function testThrowsExceptionIfPathIsNotAString($path)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        IsDotNotation::inString($path);
+    }
+
+    public function provideNonStrings()
+    {
+        return [
+            [ null ],
+            [ true ],
+            [ false ],
+            [ [ ] ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ new stdClass ],
+            [ fopen("php://input", "r") ],
+        ];
+    }
 }
