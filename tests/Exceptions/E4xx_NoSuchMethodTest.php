@@ -64,7 +64,7 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         $methodName = "doSomethingWeirdAndWonderful";
         $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
 
-        $obj = new E4xx_NoSuchMethod($expectedCode, $expectedMessage);
+        $obj = new E4xx_NoSuchMethod($className, $methodName);
 
         // ----------------------------------------------------------------
         // test the results
@@ -85,7 +85,7 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         $methodName = "doSomethingWeirdAndWonderful";
         $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
 
-        $obj = new E4xx_NoSuchMethod($expectedCode, $expectedMessage);
+        $obj = new E4xx_NoSuchMethod($className, $methodName);
 
         // ----------------------------------------------------------------
         // test the results
@@ -106,7 +106,7 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         $methodName = "doSomethingWeirdAndWonderful";
         $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
 
-        $obj = new E4xx_NoSuchMethod($expectedCode, $expectedMessage);
+        $obj = new E4xx_NoSuchMethod($className, $methodName);
 
         // ----------------------------------------------------------------
         // test the results
