@@ -135,35 +135,35 @@ class ShouldOverwrite
     }
 
     /**
-     * should we overwrite $ours[$property] with the value of $theirs?
+     * should we overwrite $ours[$key] with the value of $theirs?
      *
      * @param  array $ours
-     *         the array where $property may exist
-     * @param  string $property
-     *         the property on $ours whose fate we are deciding
+     *         the array where $key may exist
+     * @param  string $key
+     *         the index on $ours whose fate we are deciding
      * @param  mixed $theirs
-     *         the data we want to assign to the property
+     *         the data we want to assign to the index
      * @return boolean
-     *         TRUE if we should overwrite the property's existing value
+     *         TRUE if we should overwrite the index's existing value
      *         with $value
-     *         TRUE if $property currently has no value
-     *         FALSE if we should merge $value into the property's exist
+     *         TRUE if $key currently has no value
+     *         FALSE if we should merge $value into the index's exist
      *         value
      */
-    public static function intoArray($ours, $property, $theirs)
+    public static function intoArray($ours, $key, $theirs)
     {
         // robustness!
         if (!IsIndexable::checkMixed($ours)) {
             throw new E4xx_UnsupportedType(gettype($ours));
         }
 
-        // special case - property does not exist
-        if (!isset($ours[$property])) {
+        // special case - index does not exist
+        if (!array_key_exists($key, $ours)) {
             return true;
         }
 
-        // general case - property exists, and we need to decide what should
+        // general case - index exists, and we need to decide what should
         // be done about it
-        return !AreMergeable::intoMixed($ours[$property], $theirs);
+        return !AreMergeable::intoMixed($ours[$key], $theirs);
     }
 }
