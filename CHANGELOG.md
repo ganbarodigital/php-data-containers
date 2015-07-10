@@ -7,6 +7,7 @@
 We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes with full dot.notation.support :)
 
 * Exceptions\E4xx_NoSuchIndex added
+* Exceptions\E4xx_NoSuchProperty added
 * Filters\FilterDotNotationParts added
 
 The following Internal classes were also added:
