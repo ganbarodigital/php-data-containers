@@ -80,6 +80,26 @@ class IsDotNotation
             throw new E4xx_UnsupportedType(gettype($item));
         }
 
+        // make sure we have a dot somewhere we like
+        if (!self::hasDotInAcceptablePlace($item)) {
+            return false;
+        }
+
+        // if we get here, we're happy
+        return true;
+    }
+
+    /**
+     * do we have a dot, and is it somewhere we're happy with?
+     *
+     * @param  string $item
+     * @return boolean
+     *         FALSE if there is no '.' anywhere
+     *         FALSE if the first '.' is at the end of the string
+     *         TRUE otherwise
+     */
+    private static function hasDotInAcceptablePlace($item)
+    {
         // where is the dot?
         $firstDot = strpos($item, '.');
 
@@ -93,7 +113,7 @@ class IsDotNotation
             return false;
         }
 
-        // if we get here, we're happy
+        // this is okay
         return true;
     }
 }
