@@ -73,7 +73,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::fromString
+     * @covers ::inString
      */
     public function testCanUseAsObject()
     {
@@ -94,7 +94,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromString
+     * @covers ::inString
      */
     public function testCanCallStatically()
     {
@@ -104,7 +104,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = IsDotNotation::fromString('dot.notation.support');
+        $actualResult = IsDotNotation::inString('dot.notation.support');
 
         // ----------------------------------------------------------------
         // test the results
@@ -113,7 +113,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromString
+     * @covers ::inString
      */
     public function testChecksForDotNotation()
     {
@@ -123,8 +123,8 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $isDotNotation = IsDotNotation::fromString('dot.notation.support');
-        $isNotDotNotation = IsDotNotation::fromString('dotNotationSupport');
+        $isDotNotation = IsDotNotation::inString('dot.notation.support');
+        $isNotDotNotation = IsDotNotation::inString('dotNotationSupport');
 
         // ----------------------------------------------------------------
         // test the results
@@ -134,7 +134,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromString
+     * @covers ::inString
      */
     public function testRejectsWhenOnlyDotIsAtEndOfString()
     {
@@ -144,7 +144,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $isNotDotNotation = IsDotNotation::fromString('dotNotationSupport.');
+        $isNotDotNotation = IsDotNotation::inString('dotNotationSupport.');
 
         // ----------------------------------------------------------------
         // test the results

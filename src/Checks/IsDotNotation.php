@@ -60,7 +60,7 @@ class IsDotNotation
      */
     public function __invoke($item)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'from');
+        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'in');
         return self::$methodName($item);
     }
 
@@ -73,7 +73,7 @@ class IsDotNotation
      *         TRUE if the string is in dot.notation
      *         FALSE otherwise
      */
-    public static function fromString($item)
+    public static function inString($item)
     {
         // robustness!!
         if (!is_string($item)) {
