@@ -44,11 +44,15 @@
 namespace GanbaroDigital\DataContainers\Exceptions;
 
 use RuntimeException;
+use GanbaroDigital\Exceptions\ExceptionMessageData;
 
 class Exxx_DataContainerException extends RuntimeException
 {
-    public function __construct($code, $message)
+    use ExceptionMessageData;
+
+    public function __construct($code, $message, $data = array())
     {
         parent::__construct($message, $code);
+        $this->setMessageData($data);
     }
 }
