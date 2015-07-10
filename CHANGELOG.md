@@ -11,6 +11,7 @@ We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes 
 The following Internal classes were also added:
 
 * Internal\Checks\AreMergeable added
+* Internal\Checks\ShouldOverwrite added
 
 ## 2.0.1 - Sat Jul 4 2015
 
