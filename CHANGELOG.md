@@ -2,7 +2,11 @@
 
 ## develop branch
 
-Nothing yet.
+### New
+
+We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes with full dot.notation.support :)
+
+* Filters\FilterDotNotationParts added
 
 ## 2.0.1 - Sat Jul 4 2015
 
