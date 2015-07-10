@@ -125,6 +125,27 @@ class ShouldOverwrite
             throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
         }
 
+        return self::checkObject($ours, $property, $theirs);
+    }
+
+    /**
+     * should we overwrite $ours->$property with the value of $theirs?
+     *
+     * @param  object $ours
+     *         the object where $property may exist
+     * @param  string $property
+     *         the property on $ours whose fate we are deciding
+     * @param  mixed $theirs
+     *         the data we want to assign to the property
+     * @return boolean
+     *         TRUE if we should overwrite the property's existing value
+     *         with $value
+     *         TRUE if $property currently has no value
+     *         FALSE if we should merge $value into the property's exist
+     *         value
+     */
+    private static function checkObject($ours, $property, $theirs)
+    {
         // special case - property does not exist
         if (!isset($ours->$property)) {
             return true;
@@ -158,6 +179,27 @@ class ShouldOverwrite
             throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
         }
 
+        return self::checkArray($ours, $key, $theirs);
+    }
+
+    /**
+     * should we overwrite $ours[$key] with the value of $theirs?
+     *
+     * @param  array $ours
+     *         the array where $key may exist
+     * @param  string $key
+     *         the index on $ours whose fate we are deciding
+     * @param  mixed $theirs
+     *         the data we want to assign to the index
+     * @return boolean
+     *         TRUE if we should overwrite the index's existing value
+     *         with $value
+     *         TRUE if $key currently has no value
+     *         FALSE if we should merge $value into the index's exist
+     *         value
+     */
+    private static function checkArray(array $ours, $key, $theirs)
+    {
         // special case - index does not exist
         if (!array_key_exists($key, $ours)) {
             return true;

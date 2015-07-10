@@ -133,6 +133,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::intoMixed
      * @covers ::intoArray
+     * @covers ::checkArray
      */
     public function testReturnsTrueWhenOurArrayIndexNotFound()
     {
@@ -158,6 +159,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
      * @covers ::__invoke
      * @covers ::intoMixed
      * @covers ::intoArray
+     * @covers ::checkArray
      * @dataProvider provideNonMergeables
      */
     public function testReturnsTrueWhenOurArrayContainsNonMergeableType($data)
@@ -198,6 +200,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
      * @covers ::__invoke
      * @covers ::intoMixed
      * @covers ::intoObject
+     * @covers ::checkObject
      * @dataProvider provideNonMergeables
      */
     public function testReturnsTrueWhenOurObjectContainsNonMergeableType($data)
@@ -224,6 +227,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
      * @covers ::intoMixed
      * @covers ::intoArray
      * @covers ::intoObject
+     * @covers ::checkObject
      * @dataProvider provideNonMergeables
      */
     public function testReturnsTrueWhenTheirDataIsNotMergeable($theirs)
