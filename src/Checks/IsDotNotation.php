@@ -46,6 +46,7 @@ namespace GanbaroDigital\DataContainers\Checks;
 
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
+use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
 class IsDotNotation
 {
@@ -77,7 +78,7 @@ class IsDotNotation
     {
         // robustness!!
         if (!is_string($item)) {
-            throw new E4xx_UnsupportedType(gettype($item));
+            throw new E4xx_UnsupportedType(SimpleType::fromMixed($item));
         }
 
         // make sure we have a dot somewhere we like

@@ -48,6 +48,7 @@ use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
 use GanbaroDigital\Reflection\Checks\IsIndexable;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
+use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
 class ShouldOverwrite
 {
@@ -121,7 +122,7 @@ class ShouldOverwrite
     {
         // robustness!
         if (!IsAssignable::checkMixed($ours)) {
-            throw new E4xx_UnsupportedType(gettype($ours));
+            throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
         }
 
         // special case - property does not exist
@@ -154,7 +155,7 @@ class ShouldOverwrite
     {
         // robustness!
         if (!IsIndexable::checkMixed($ours)) {
-            throw new E4xx_UnsupportedType(gettype($ours));
+            throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
         }
 
         // special case - index does not exist
