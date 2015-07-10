@@ -44,7 +44,7 @@
 
 namespace GanbaroDigital\DataContainers\Checks;
 
-use GanbaroDigial\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 
 class IsDotNotation
