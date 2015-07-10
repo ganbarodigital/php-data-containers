@@ -45,6 +45,15 @@ namespace GanbaroDigital\DataContainers\Exceptions;
 
 class E4xx_NoSuchMethod extends E4xx_DataContainerException
 {
+    /**
+     * exception thrown when we cannot find a given method on a class or
+     * object
+     *
+     * @param string $className
+     *        the class that does not define the method
+     * @param string $methodName
+     *        the method that cannot be found
+     */
     public function __construct($className, $methodName)
     {
         $msg = "no such method '{$methodName}' on class '{$className}'";
