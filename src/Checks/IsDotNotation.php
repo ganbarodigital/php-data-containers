@@ -45,6 +45,7 @@
 namespace GanbaroDigital\DataContainers\Checks;
 
 use GanbaroDigial\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 
 class IsDotNotation
 {
@@ -59,15 +60,8 @@ class IsDotNotation
      */
     public function __invoke($item)
     {
-        if (is_object($item) && method_exists($item, '__toString')) {
-            return self::fromString((string)$item);
-        }
-
-        if (is_string($item)) {
-            return self::fromString($item);
-        }
-
-        throw new E4xx_UnsupportedType(gettype($item));
+        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'from');
+        return self::$methodName($item);
     }
 
     /**
