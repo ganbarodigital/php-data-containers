@@ -115,6 +115,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::inString
+     * @covers ::hasDotInAcceptablePlace
      */
     public function testChecksForDotNotation()
     {
