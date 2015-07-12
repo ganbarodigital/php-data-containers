@@ -64,8 +64,12 @@ class DataBag extends stdClass implements IteratorAggregate
      * magic method, called when there's an attempt to get a property
      * that doesn't actually exist
      *
-     * @param  string $property
+     * if $propertyName is a dot.notation.support path, we'll attempt to
+     * retrieve the property from the data bag's children
+     *
+     * @param  string $propertyName
      *         name of the property being read
+     * @return mixed
      *
      * @throws E4xx_NoSuchProperty
      */
@@ -84,10 +88,14 @@ class DataBag extends stdClass implements IteratorAggregate
      * magic method, called when there's an attempt to set a property that
      * doesn't actually exist
      *
+     * if $propertyName is a dot.notation.support path, we'll attempt to
+     * set the property using the path
+     *
      * @param string $propertyName
      *        name of the property to set
      * @param mixed $propertyValue
      *        value of the property to set
+     * @return void
      */
     public function __set($propertyName, $propertyValue)
     {
