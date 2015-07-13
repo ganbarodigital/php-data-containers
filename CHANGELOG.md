@@ -12,6 +12,7 @@ We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes 
 * Exceptions\E4xx_UnsupportedType added
 * Filters\FilterDotNotationParts added
 * ValueBuilders\BuildDataBag added
+* ValueBuilders\MergeIntoAssignable added
 * ValueBuilders\MergeIntoProperty added
 
 The following Internal classes were also added:
