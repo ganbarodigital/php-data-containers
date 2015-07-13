@@ -13,6 +13,7 @@ We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes 
 * Filters\FilterDotNotationParts added
 * ValueBuilders\BuildDataBag added
 * ValueBuilders\MergeIntoAssignable added
+* ValueBuilders\MergeIntoIndexable added
 * ValueBuilders\MergeIntoProperty added
 
 The following Internal classes were also added:
