@@ -229,6 +229,41 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::intoArray
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchIndex
+     */
+    public function testThrowsExceptionWhenChildArrayOfArrayDoesNotMatchPath()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = [ "one" => [ "two" => 2] ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        DescendDotNotationPath::intoArray($data, "one.three");
+    }
+
+    /**
+     * @covers ::intoArray
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchIndex
+     */
+    public function testThrowsExceptionWhenChildObjectOfArrayDoesNotMatchPath()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = [ "one" => (object)[ "two" => 2] ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        DescendDotNotationPath::intoArray($data, "one.three");
+    }
+
+
+    /**
      * @covers ::getPartFromObject
      * @covers ::getExtension
      */

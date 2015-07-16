@@ -72,10 +72,10 @@ class DescendDotNotationPath
             return self::getPathFromRoot($arr, $index, $extendingItem);
         }
         catch (E4xx_NoSuchIndex $e) {
-            throw new E4xx_NoSuchIndex($arr, $index);
+            throw new E4xx_NoSuchIndex('array', $index);
         }
         catch (E4xx_NoSuchProperty $e) {
-            throw new E4xx_NoSuchIndex($arr, $index);
+            throw new E4xx_NoSuchIndex('array', $index);
         }
     }
 
