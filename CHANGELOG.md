@@ -13,9 +13,11 @@ We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes 
 * Exceptions\E4xx_NoSuchContainedData added
 * Exceptions\E4xx_NoSuchIndex added
 * Exceptions\E4xx_NoSuchProperty added
+* Exceptions\E4xx_NotDotNotationPath added
 * Exceptions\E4xx_UnsupportedType added
 * Filters\FilterDotNotationPath added
 * Filters\FilterDotNotationParts added
+* Requirements\RequireDotNotationPath added
 * ValueBuilders\BuildDataBag added
 * ValueBuilders\DescendDotNotationPath added
 * ValueBuilders\MergeIntoAssignable added
