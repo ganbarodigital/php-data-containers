@@ -2,6 +2,10 @@
 
 ## develop branch
 
+Nothing yet.
+
+## v2.1.0 - Sat Jul 18 2015
+
 ### New
 
 We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes with full dot.notation.support :)
