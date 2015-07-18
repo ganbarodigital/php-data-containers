@@ -46,6 +46,7 @@ namespace GanbaroDigital\DataContainers\Checks;
 
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
+use GanbaroDigital\Reflection\Requirements\RequireStringy;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
 class IsDotNotationPath
@@ -77,9 +78,7 @@ class IsDotNotationPath
     public static function inString($item)
     {
         // robustness!!
-        if (!is_string($item)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($item));
-        }
+        RequireStringy::checkMixed($item, E4xx_UnsupportedType::class);
 
         // make sure we have a dot somewhere we like
         if (!self::hasDotInAcceptablePlace($item)) {
