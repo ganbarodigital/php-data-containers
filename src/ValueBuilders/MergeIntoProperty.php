@@ -48,6 +48,8 @@ use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\DataContainers\Internal\Checks\ShouldOverwrite;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
 use GanbaroDigital\Reflection\Checks\IsIndexable;
+use GanbaroDigital\Reflection\Requirements\RequireAssignable;
+use GanbaroDigital\Reflection\Requirements\RequireIndexable;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
 class MergeIntoProperty
@@ -66,9 +68,7 @@ class MergeIntoProperty
     public static function ofArray(&$arr, $property, $value)
     {
         // robustness!
-        if (!IsIndexable::checkMixed($arr)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($arr));
-        }
+        RequireIndexable::checkMixed($arr, E4xx_UnsupportedType::class);
 
         // easiest case - no clash
         if (ShouldOverwrite::intoArray($arr, $property, $value)) {
@@ -100,9 +100,7 @@ class MergeIntoProperty
     public static function ofObject($obj, $property, $value)
     {
         // robustness!
-        if (!IsAssignable::checkMixed($obj)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($obj));
-        }
+        RequireAssignable::checkMixed($obj, E4xx_UnsupportedType::class);
 
         // easiest case - no clash
         if (ShouldOverwrite::intoObject($obj, $property, $value)) {

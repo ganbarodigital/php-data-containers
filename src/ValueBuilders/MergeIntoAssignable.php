@@ -51,6 +51,8 @@ use GanbaroDigital\DataContainers\Internal\Checks\ShouldOverwrite;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
 use GanbaroDigital\Reflection\Checks\IsIndexable;
 use GanbaroDigital\Reflection\Checks\IsTraversable;
+use GanbaroDigital\Reflection\Requirements\RequireAssignable;
+use GanbaroDigital\Reflection\Requirements\RequireTraversable;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
@@ -68,12 +70,8 @@ class MergeIntoAssignable
     public static function fromArray($ours, $theirs)
     {
         // robustness!
-        if (!IsAssignable::checkMixed($ours)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
-        }
-        if (!IsTraversable::checkMixed($theirs)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($theirs));
-        }
+        RequireAssignable::checkMixed($ours, E4xx_UnsupportedType::class);
+        RequireTraversable::checkMixed($theirs, E4xx_UnsupportedType::class);
 
         // copy from them to us
         foreach ($theirs as $key => $value) {
@@ -122,29 +120,26 @@ class MergeIntoAssignable
      *         the object that we want to merge from
      * @return void
      */
-    public static function fromObject(&$ours, $theirs)
+    public static function fromObject($ours, $theirs)
     {
         // robustness!
-        if (!is_object($theirs)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($theirs));
-        }
+        RequireAssignable::checkMixed($theirs, E4xx_UnsupportedType::class);
         self::fromArray($ours, get_object_vars($theirs));
     }
 
     /**
      * merge their data into our object
      *
-     * @param  object &$ours
+     * @param  object $ours
      *         the object that we want to merge into
      * @param  array|object $theirs
      *         the data that we want to merge from
      * @return void
      */
-    public static function fromMixed(&$ours, $theirs)
+    public static function fromMixed($ours, $theirs)
     {
-        // robustness!
-        if (!IsAssignable::checkMixed($ours)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
+        if (IsAssignable::checkMixed($theirs)) {
+            return self::fromObject($ours, $theirs);
         }
 
         if (IsTraversable::checkMixed($theirs)) {
@@ -166,7 +161,6 @@ class MergeIntoAssignable
      */
     public function __invoke($ours, $theirs)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($theirs, get_class($this), 'from');
-        return self::$methodName($ours, $theirs);
+        return self::fromMixed($ours, $theirs);
     }
 }

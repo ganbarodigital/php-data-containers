@@ -52,6 +52,8 @@ use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
 use GanbaroDigital\Reflection\Checks\IsIndexable;
 use GanbaroDigital\Reflection\Checks\IsTraversable;
+use GanbaroDigital\Reflection\Requirements\RequireAssignable;
+use GanbaroDigital\Reflection\Requirements\RequireIndexable;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
@@ -71,9 +73,8 @@ class DescendDotNotationPath
      */
     public static function &intoArray(&$arr, $index, $extendingItem = null)
     {
-        if (!IsIndexable::checkMixed($arr)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($arr));
-        }
+        // robustness!
+        RequireIndexable::checkMixed($arr, E4xx_UnsupportedType::class);
 
         $retval =& self::getPathFromRoot($arr, $index, $extendingItem);
         return $retval;
@@ -93,9 +94,8 @@ class DescendDotNotationPath
      */
     public static function &intoObject($obj, $property, $extendingItem = null)
     {
-        if (!IsAssignable::checkMixed($obj)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($obj));
-        }
+        // robustness!
+        RequireAssignable::checkMixed($obj, E4xx_UnsupportedType::class);
 
         $retval =& self::getPathFromRoot($obj, $property, $extendingItem);
         return $retval;
@@ -141,9 +141,7 @@ class DescendDotNotationPath
      */
     public function &__invoke($item, $path, $extendingItem = null)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'into');
-        $retval = self::$methodName($item, $path, $extendingItem);
-        return $retval;
+        return self::intoMixed($item, $path, $extendingItem);
     }
 
     /**
