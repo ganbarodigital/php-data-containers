@@ -34,25 +34,70 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Exceptions
+ * @package   DataContainers/Internal
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Exceptions;
+namespace GanbaroDigital\DataContainers\Internal\Checks;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
+use GanbaroDigial\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\Reflection\Checks\IsAssignable;
+use GanbaroDigital\Reflection\Checks\IsIndexable;
+use GanbaroDigital\Reflection\Checks\IsTraversable;
+use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 
-class Exxx_DataContainerException extends RuntimeException
+class AreMergeable
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * does it make sense to attempt to merge the contents of $theirs into
+     * $ours?
+     *
+     * @param  mixed $ours
+     *         where we want to merge to
+     * @param  mixed $theirs
+     *         where we want to merge from
+     * @return boolean
+     *         true if merging makes sense
+     *         false otherwise
+     */
+    public static function intoMixed($ours, $theirs)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        // if we can't traverse over theirs, no good
+        if (!IsTraversable::checkMixed($theirs)) {
+            return false;
+        }
+
+        // if we have arrays or databag-type objects, we're good
+        if (IsIndexable::checkMixed($ours) || IsAssignable::checkMixed($ours)) {
+            return true;
+        }
+
+        // if we get here, then $ours is a complex object, which
+        // we do not know how to merge
+        //
+        // or it is a scalar, which doesn't support merging at all
+        return false;
     }
+
+    /**
+     * does it make sense to attempt to merge the contents of $theirs into
+     * $ours?
+     *
+     * @param  mixed $ours
+     *         where we want to merge to
+     * @param  mixed $theirs
+     *         where we want to merge from
+     * @return boolean
+     *         true if merging makes sense
+     *         false otherwise
+     */
+    public function __invoke($ours, $theirs)
+    {
+        return self::intoMixed($ours, $theirs);
+    }
+
 }

@@ -43,16 +43,6 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
-
-class Exxx_DataContainerException extends RuntimeException
+class E4xx_NoSuchContainedData extends E4xx_DataContainerException
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
-    {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
-    }
 }

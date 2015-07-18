@@ -43,16 +43,20 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
-
-class Exxx_DataContainerException extends RuntimeException
+class E4xx_NoSuchProperty extends E4xx_NoSuchContainedData
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * exception thrown when a given property does not exist on an object
+     *
+     * @param object $obj
+     *        the object which does not have the property
+     * @param string $propertyName
+     *        the name of the property which does not exist
+     */
+    public function __construct($obj, $propertyName)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        $className = get_class($obj);
+        $msg = "no such property '{$propertyName}' on class '{$className}'";
+        parent::__construct(400, $msg);
     }
 }

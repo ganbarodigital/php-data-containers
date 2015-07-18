@@ -34,84 +34,139 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Exceptions
+ * @package   DataContainers/Internal
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Exceptions;
+namespace GanbaroDigital\DataContainers\Internal\Checks;
 
 use PHPUnit_Framework_TestCase;
-use RuntimeException;
+use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
+ * @coversDefaultClass GanbaroDigital\DataContainers\Internal\Checks\AreMergeable
  */
-class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
+class AreMergeableTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers ::__construct
+     * @coversNothing
      */
     public function testCanInstantiate()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $obj = new AreMergeable;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof E4xx_NoSuchMethod);
+        $this->assertTrue($obj instanceof AreMergeable);
     }
 
     /**
-     * @covers ::__construct
+     * @covers ::__invoke
+     * @covers ::intoMixed
      */
-    public function testInstanceOfE4xx_DataContainerException()
+    public function testCanUseAsObject()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $obj = new AreMergeable;
+        $data1 = [];
+        $data2 = [];
+        $expectedResult = true;
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = $obj($data1, $data2);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof E4xx_DataContainerException);
+        $this->assertEquals($expectedResult, $actualResult);
     }
 
     /**
-     * @covers ::__construct
+     * @covers ::intoMixed
+     * @dataProvider provideNonTraversable
      */
-    public function testInstanceOfExxx_DataContainerException()
+    public function testTheirsMustBeTraversable($theirs)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $ours = [];
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = AreMergeable::intoMixed($ours, $theirs);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof Exxx_DataContainerException);
+        $this->assertFalse($actualResult);
+    }
+
+    public function provideNonTraversable()
+    {
+        return [
+            [ null ],
+            [ false ],
+            [ true ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ new AreMergeable ],
+            [ fopen("php://input", "r") ],
+            [ "traverse me!" ],
+        ];
+    }
+
+    /**
+     * @covers ::intoMixed
+     * @dataProvider provideNonIndexableNorAssignable
+     */
+    public function testOursMustBeIndexableOrAssignable($ours)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $theirs = [];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = AreMergeable::intoMixed($ours, $theirs);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertFalse($actualResult);
+    }
+
+    public function provideNonIndexableNorAssignable()
+    {
+        return [
+            [ null ],
+            [ false ],
+            [ true ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ new AreMergeable ],
+            [ fopen("php://input", "r") ],
+            [ "traverse me!" ],
+        ];
     }
 
 }

@@ -43,16 +43,32 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
+use GanbaroDigital\Exceptions\Traits\UnsupportedType;
 
-class Exxx_DataContainerException extends RuntimeException
+class E4xx_UnsupportedType extends E4xx_DataContainerException
 {
-    use ExceptionMessageData;
+    use UnsupportedType;
 
-    public function __construct($code, $message, $data = array())
+    /**
+     * exception thrown when a method's input parameter has a type that cannot
+     * be processed
+     *
+     * @param string  $type
+     *        the data type that is not supported
+     * @param integer $level
+     *        how far up the call stack do we look for the name of the
+     *        method that does not support this data type?
+     */
+    public function __construct($type, $level = 1)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        // our list of args, in case someone wants to dig deeper into
+        // what went wrong
+        $data = $this->buildErrorData($type, $level);
+
+        // what do we want to tell our error handler?
+        $msg = $this->buildErrorMessage($data['type'], $data['caller']);
+
+        // all done
+        parent::__construct(400, $msg, $data);
     }
 }

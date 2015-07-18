@@ -34,84 +34,131 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Exceptions
+ * @package   DataContainers/Requirements
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Exceptions;
+namespace GanbaroDigital\DataContainers\Requirements;
 
+use ArrayObject;
+use GanbaroDigital\DataContainers\Containers\DataBag;
 use PHPUnit_Framework_TestCase;
-use RuntimeException;
+use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
+ * @coversDefaultClass GanbaroDigital\DataContainers\Requirements\RequireReadableContainer
  */
-class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
+class RequireReadableContainerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers ::__construct
+     * @coversNothing
      */
     public function testCanInstantiate()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        // ----------------------------------------------------------------
+        // perform the change
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        $obj = new RequireReadableContainer;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof E4xx_NoSuchMethod);
+        $this->assertTrue($obj instanceof RequireReadableContainer);
     }
 
     /**
-     * @covers ::__construct
+     * @covers ::__invoke
+     * @dataProvider provideReadableContainers
      */
-    public function testInstanceOfE4xx_DataContainerException()
+    public function testCanUseAsObject($item)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
-
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        $obj = new RequireReadableContainer;
 
         // ----------------------------------------------------------------
-        // test the results
+        // perform the change
 
-        $this->assertTrue($obj instanceof E4xx_DataContainerException);
+        $obj($item);
     }
 
     /**
-     * @covers ::__construct
+     * @covers ::checkMixed
+     * @dataProvider provideReadableContainers
      */
-    public function testInstanceOfExxx_DataContainerException()
+    public function testCanCallStatically($item)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        // ----------------------------------------------------------------
+        // perform the change
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        RequireReadableContainer::checkMixed($item);
+    }
+
+    /**
+     * @covers ::__invoke
+     * @dataProvider provideNonReadableContainers
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     */
+    public function testRejectsNonReadableContainersWhenUsedAsObject($item)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new RequireReadableContainer;
 
         // ----------------------------------------------------------------
-        // test the results
+        // perform the change
 
-        $this->assertTrue($obj instanceof Exxx_DataContainerException);
+        $obj($item);
+    }
+
+    /**
+     * @covers ::checkMixed
+     * @dataProvider provideNonReadableContainers
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     */
+    public function testRejectsNonReadableContainersWhenCalledStatically($item)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        RequireReadableContainer::checkMixed($item);
+    }
+
+    public function provideReadableContainers()
+    {
+        return [
+            [ [] ],
+            [ new stdClass, ],
+            [ new ArrayObject([]) ],
+            [ new DataBag ],
+        ];
+    }
+
+    public function provideNonReadableContainers()
+    {
+        return [
+            [ null ],
+            [ false ],
+            [ true ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ fopen("php://input", "r") ],
+            [ "hello, world!" ],
+        ];
     }
 
 }

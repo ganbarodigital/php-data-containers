@@ -34,138 +34,154 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Caches
+ * @package   DataContainers/Checks
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Caches;
+namespace GanbaroDigital\DataContainers\Checks;
 
 use PHPUnit_Framework_TestCase;
-use GanbaroDigital\UnitTestHelpers\ClassesAndObjects\InvokeMethod;
-
-// we use these caches for testing the independence of caches
-class CacheTypeA {
-    use StaticDataCache;
-}
-class CacheTypeB {
-    use StaticDataCache;
-}
-
-// we use these caches for testing shared caches
-class CacheTypeASub1 extends CacheTypeA { }
-class CacheTypeASub2 extends CacheTypeA { }
+use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\Caches\StaticDataCache
+ * @coversDefaultClass GanbaroDigital\DataContainers\Checks\IsDotNotationPath
  */
-class StaticDataCacheTest extends PHPUnit_Framework_TestCase
+class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers ::getFromCache
-     * @covers ::setInCache
-     * @dataProvider provideDataForTheCache
+     * @coversNothing
      */
-    public function testCanStoreDataInTheCache($key, $expectedValue)
+    public function testCanInstantiate()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $cache = new CacheTypeA;
-        // make sure the underlying shared cache is EMPTY
-        InvokeMethod::onString(CacheTypeA::class, 'resetCache');
-        $this->assertNull(InvokeMethod::onObject($cache, 'getFromCache', [$key]));
+
 
         // ----------------------------------------------------------------
         // perform the change
 
-        InvokeMethod::onObject($cache, 'setInCache', [$key, $expectedValue]);
+        $obj = new IsDotNotationPath;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $actualValue = InvokeMethod::onObject($cache, 'getFromCache', [$key]);
-        $this->assertEquals($expectedValue, $actualValue);
+        $this->assertTrue($obj instanceof IsDotNotationPath);
     }
 
     /**
-     * @covers ::getFromCache
-     * @dataProvider provideDataForTheCache
+     * @covers ::__invoke
+     * @covers ::inString
      */
-    public function testReturnsNullIfNotInCache($key, $expectedValue)
+    public function testCanUseAsObject()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $cache = new CacheTypeA;
-        // make sure the underlying shared cache is EMPTY
-        InvokeMethod::onString(CacheTypeA::class, 'resetCache');
+        $obj = new IsDotNotationPath;
 
         // ----------------------------------------------------------------
         // perform the change
 
+        $actualResult = $obj('dot.notation.support');
+
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertNull(InvokeMethod::onObject($cache, 'getFromCache', [$key]));
+        $this->assertTrue($actualResult);
     }
 
-    public function provideDataForTheCache()
+    /**
+     * @covers ::inString
+     */
+    public function testCanCallStatically()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = IsDotNotationPath::inString('dot.notation.support');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($actualResult);
+    }
+
+    /**
+     * @covers ::inString
+     * @covers ::hasDotInAcceptablePlace
+     */
+    public function testChecksForDotNotation()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $IsDotNotationPath = IsDotNotationPath::inString('dot.notation.support');
+        $isNotDotNotation = IsDotNotationPath::inString('dotNotationSupport');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($IsDotNotationPath);
+        $this->assertFalse($isNotDotNotation);
+    }
+
+    /**
+     * @covers ::inString
+     * @covers ::hasDotInAcceptablePlace
+     */
+    public function testRejectsWhenOnlyDotIsAtEndOfString()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $isNotDotNotation = IsDotNotationPath::inString('dotNotationSupport.');
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertFalse($isNotDotNotation);
+    }
+
+    /**
+     * @covers ::inString
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     * @dataProvider provideNonStrings
+     */
+    public function testThrowsExceptionIfPathIsNotAString($path)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        IsDotNotationPath::inString($path);
+    }
+
+    public function provideNonStrings()
     {
         return [
-            [ 'name', 'harry' ],
-            [ 'name', 'sally' ],
-            [ 'name', 'fred' ],
+            [ null ],
+            [ true ],
+            [ false ],
+            [ [ ] ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ new stdClass ],
+            [ fopen("php://input", "r") ],
         ];
     }
-
-    /**
-     * @coversNone
-     */
-    public function testSupportsIndependentCaches()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // make sure we start with a known state
-        InvokeMethod::onString(CacheTypeA::class, 'resetCache');
-        InvokeMethod::onString(CacheTypeB::class, 'resetCache');
-
-        // we expect CacheTypeA to ONLY have these values
-        $expectedResultsA = [
-            'harry',
-            'sally',
-            'fred'
-        ];
-
-        // we expect CacheTypeB to ONLY have these values
-        $expectedResultsB = [
-            'cod',
-            'haddock',
-            'trout'
-        ];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        foreach ($expectedResultsA as $key => $value) {
-            InvokeMethod::onString(CacheTypeA::class, 'setInCache', [$key, $value]);
-        }
-        foreach ($expectedResultsB as $key => $value) {
-            InvokeMethod::onString(CacheTypeB::class, 'setInCache', [$key, $value]);
-        }
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $actualResultsA = InvokeMethod::onString(CacheTypeA::class, 'getCache');
-        $actualResultsB = InvokeMethod::onString(CacheTypeB::class, 'getCache');
-
-        $this->assertEquals($expectedResultsA, $actualResultsA);
-        $this->assertEquals($expectedResultsB, $actualResultsB);
-    }
-
-
 }

@@ -45,11 +45,12 @@ namespace GanbaroDigital\DataContainers\Exceptions;
 
 use PHPUnit_Framework_TestCase;
 use RuntimeException;
+use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
+ * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty
  */
-class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
+class E4xx_NoSuchPropertyTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers ::__construct
@@ -60,16 +61,17 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $obj = new stdClass;
+        $className = get_class($obj);
+        $propName = "aMissingProperty";
+        $expectedMessage = "no such property '{$propName}' on object '{$className}'";
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        $obj = new E4xx_NoSuchProperty($obj, $propName);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof E4xx_NoSuchMethod);
+        $this->assertTrue($obj instanceof E4xx_NoSuchProperty);
     }
 
     /**
@@ -81,11 +83,12 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $obj = new stdClass;
+        $className = get_class($obj);
+        $propName = "aMissingProperty";
+        $expectedMessage = "no such property '{$propName}' on object '{$className}'";
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        $obj = new E4xx_NoSuchProperty($obj, $propName);
 
         // ----------------------------------------------------------------
         // test the results
@@ -102,11 +105,12 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $obj = new stdClass;
+        $className = get_class($obj);
+        $propName = "aMissingProperty";
+        $expectedMessage = "no such property '{$propName}' on object '{$className}'";
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        $obj = new E4xx_NoSuchProperty($obj, $propName);
 
         // ----------------------------------------------------------------
         // test the results

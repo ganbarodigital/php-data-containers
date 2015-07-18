@@ -43,16 +43,17 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
+use GanbaroDigital\Reflection\Checks\IsAssignable;
+use GanbaroDigital\Reflection\Checks\IsIndexable;
+use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
-class Exxx_DataContainerException extends RuntimeException
+class E4xx_CannotDescendPath extends E4xx_DataContainerException
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    public function __construct($item, $path)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        $type = SimpleType::fromMixed($item);
+        $msg = "'{$type}' at path '{$path}' is not a container";
+
+        parent::__construct(400, $msg);
     }
 }

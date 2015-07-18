@@ -34,25 +34,54 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Exceptions
+ * @package   DataContainers/Checks
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Exceptions;
+namespace GanbaroDigital\DataContainers\Checks;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\Reflection\Checks\IsAssignable;
+use GanbaroDigital\Reflection\Checks\IsIndexable;
+use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
+use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
-class Exxx_DataContainerException extends RuntimeException
+class IsReadableContainer
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * is the variable a data container that we can read from?
+     *
+     * @param  mixed $item
+     *         the item to check
+     * @return boolean
+     *         TRUE if the item is a data container
+     *         FALSE otherwise
+     */
+    public function __invoke($item)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'check');
+        return self::$methodName($item);
+    }
+
+    /**
+     * is the variable a data container that we can read from?
+     *
+     * @param  mixed $item
+     *         the item to check
+     * @return boolean
+     *         TRUE if the item is a data container
+     *         FALSE otherwise
+     */
+    public static function checkMixed($item)
+    {
+        if (IsAssignable::checkMixed($item) || IsIndexable::checkMixed($item)) {
+            return true;
+        }
+
+        return false;
     }
 }

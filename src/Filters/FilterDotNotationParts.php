@@ -34,74 +34,63 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Caches
+ * @package   DataContainers/Filters
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
- * @link      http://code.ganbarodigital.com/php-file-system
+ * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Caches;
+namespace GanbaroDigital\DataContainers\Filters;
 
-trait StaticDataCache
+use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
+
+class FilterDotNotationParts
 {
     /**
-     * our cached data
+     * extract all but the end of a dot.notation.support string
      *
-     * @var array
+     * @param  string $dotNotation
+     *         the string to extract from
+     * @param  int $start
+     *         which part do we want to start from?
+     * @param  int $len
+     *         how many parts do we want?
+     * @return string
+     *         the extracted parts
      */
-    protected static $cachedData = [];
-
-    /**
-     * do we have this result set in the cache?
-     *
-     * @param  string|int|double $key
-     *         the index to search for
-     * @return mixed|null
-     */
-    protected static function getFromCache($key)
+    public static function fromString($dotNotation, $start, $len)
     {
-        if (isset(static::$cachedData[$key])) {
-            return static::$cachedData[$key];
+        // robustness!
+        if (!is_int($start)) {
+            throw new E4xx_UnsupportedType(gettype($start));
+        }
+        if (!is_int($len)) {
+            throw new E4xx_UnsupportedType(gettype($len));
         }
 
-        return null;
+        $parts = explode(".", $dotNotation);
+        $parts = array_slice($parts, $start, $len);
+        return implode(".", $parts);
     }
 
     /**
-     * store data about a key to speed up repeated calls
+     * extract all but the end of a dot.notation.support string
      *
-     * @param string|int|double $key
-     *        the data key to store information about
-     * @param mixed $data
-     *        the data to store in the cache
+     * @param  mixed $dotNotation
+     *         the string to extract from
+     * @param  int $start
+     *         which part do we want to start from?
+     * @param  int $len
+     *         how many parts do we want?
+     * @return string
+     *         the extracted parts
      */
-    protected static function setInCache($key, $data)
+    public function __invoke($dotNotation, $start, $len)
     {
-        static::$cachedData[$key] = $data;
-    }
-
-    /**
-     * empty out the cache completely
-     *
-     * this is mostly provided for unit testing purposes
-     *
-     * @return void
-     */
-    protected static function resetCache()
-    {
-        static::$cachedData = [];
-    }
-
-    /**
-     * return a copy of the cache for inspection
-     *
-     * this is mostly provided for unit testing purposes
-     *
-     * @return array
-     */
-    protected static function getCache()
-    {
-        return static::$cachedData;
+        $methodName = FirstMethodMatchingType::fromMixed($dotNotation, get_class($this), 'from');
+        return self::$methodName($dotNotation, $start, $len);
     }
 }

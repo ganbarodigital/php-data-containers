@@ -43,16 +43,18 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
-
-class Exxx_DataContainerException extends RuntimeException
+class E4xx_NotDotNotationPath extends E4xx_DataContainerException
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * exception thrown when we're given something that isn't really a
+     * dot.notation.support path
+     *
+     * @param string $path
+     *        the path that isn't a dot.notation.support path
+     */
+    public function __construct($path)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        $msg = "'{$path}' is not a dot.notation.support path";
+        parent::__construct(400, $msg);
     }
 }

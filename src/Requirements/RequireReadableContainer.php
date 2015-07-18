@@ -34,25 +34,49 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Exceptions
+ * @package   DataContainers/Requirements
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Exceptions;
+namespace GanbaroDigital\DataContainers\Requirements;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
+use GanbaroDigital\DataContainers\Checks\IsReadableContainer;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 
-class Exxx_DataContainerException extends RuntimeException
+class RequireReadableContainer
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * throws exceptions if $item is not a valid readable container
+     *
+     * @param  mixed $item
+     *         the item to check
+     * @param  string $eUnsupportedType
+     *         the class to use when throwing an unsupported-type exception
+     * @return void
+     */
+    public static function checkMixed($item, $eUnsupportedType = E4xx_UnsupportedType::class)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        // make sure we have a valid container
+        if (!IsReadableContainer::checkMixed($item)) {
+            throw new $eUnsupportedType($item);
+        }
+    }
+
+    /**
+     * throws exceptions if $item is not a valid readable container
+     *
+     * @param  mixed $item
+     *         the item to check
+     * @param  string $eUnsupportedType
+     *         the class to use when throwing an unsupported-type exception
+     * @return void
+     */
+    public function __invoke($item, $eUnsupportedType = E4xx_UnsupportedType::class)
+    {
+        self::checkMixed($item, $eUnsupportedType);
     }
 }

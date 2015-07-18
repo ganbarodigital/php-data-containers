@@ -43,16 +43,19 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
-
-class Exxx_DataContainerException extends RuntimeException
+class E4xx_NoSuchIndex extends E4xx_NoSuchContainedData
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * exception thrown when a requested index cannot be found in an array
+     *
+     * @param string $arrName
+     *        the 'name' of the array
+     * @param mixed $key
+     *        the index that cannot be found in the array
+     */
+    public function __construct($arrName, $key)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        $msg = "no such index '{$key}' on array '{$arrName}'";
+        parent::__construct(400, $msg);
     }
 }

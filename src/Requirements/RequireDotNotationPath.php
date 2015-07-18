@@ -34,25 +34,57 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Exceptions
+ * @package   DataContainers/Requirements
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Exceptions;
+namespace GanbaroDigital\DataContainers\Requirements;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
-
-class Exxx_DataContainerException extends RuntimeException
+use GanbaroDigital\DataContainers\Checks\IsDotNotationPath;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_NotDotNotationPath;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\Reflection\Requirements\RequireStringy;
+class RequireDotNotationPath
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * throws exceptions if $path is not a valid dot.notation.support path
+     *
+     * @param  string $path
+     *         the path to check
+     * @param  string $eUnsupportedType
+     *         the class to use when throwing an unsupported-type exception
+     * @param  string $eNotDotNotationPath
+     *         the class to use when throwing a not-dot-notation-path exception
+     * @return void
+     */
+    public static function checkMixed($path, $eUnsupportedType = E4xx_UnsupportedType::class, $eNotDotNotationPath = E4xx_NotDotNotationPath::class)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        // make sure we have a string
+        RequireStringy::checkMixed($path, $eUnsupportedType);
+
+        // make sure the string contains a dot.notation.support path
+        if (!IsDotNotationPath::inString($path)) {
+            throw new $eNotDotNotationPath($path);
+        }
+    }
+
+    /**
+     * throws exceptions if $path is not a valid dot.notation.support path
+     *
+     * @param  string $path
+     *         the path to check
+     * @param  string $eUnsupportedType
+     *         the class to use when throwing an unsupported-type exception
+     * @param  string $eNotDotNotationPath
+     *         the class to use when throwing a not-dot-notation-path exception
+     * @return void
+     */
+    public function __invoke($path, $eUnsupportedType = E4xx_UnsupportedType::class, $eNotDotNotationPath = E4xx_NotDotNotationPath::class)
+    {
+        self::checkMixed($path, $eUnsupportedType, $eNotDotNotationPath);
     }
 }

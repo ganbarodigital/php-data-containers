@@ -47,9 +47,9 @@ use PHPUnit_Framework_TestCase;
 use RuntimeException;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchMethod
+ * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchIndex
  */
-class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
+class E4xx_NoSuchIndexTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers ::__construct
@@ -60,16 +60,16 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $arrName = "AnExampleName";
+        $indexName = "aMissingKey";
+        $expectedMessage = "no such index '{$indexName}' on array '{$arrName}'";
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        $obj = new E4xx_NoSuchIndex($arrName, $indexName);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof E4xx_NoSuchMethod);
+        $this->assertTrue($obj instanceof E4xx_NoSuchIndex);
     }
 
     /**
@@ -81,11 +81,11 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $arrName = "AnExampleName";
+        $indexName = "aMissingKey";
+        $expectedMessage = "no such index '{$indexName}' on array '{$arrName}'";
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        $obj = new E4xx_NoSuchIndex($arrName, $indexName);
 
         // ----------------------------------------------------------------
         // test the results
@@ -102,11 +102,11 @@ class E4xx_NoSuchMethodTest extends PHPUnit_Framework_TestCase
         // setup your test
 
         $expectedCode = 400;
-        $className = "AnExampleClass";
-        $methodName = "doSomethingWeirdAndWonderful";
-        $expectedMessage = "no such method '{$methodName}' on class '{$className}'";
+        $arrName = "AnExampleName";
+        $indexName = "aMissingKey";
+        $expectedMessage = "no such index '{$indexName}' on array '{$arrName}'";
 
-        $obj = new E4xx_NoSuchMethod($className, $methodName);
+        $obj = new E4xx_NoSuchIndex($arrName, $indexName);
 
         // ----------------------------------------------------------------
         // test the results

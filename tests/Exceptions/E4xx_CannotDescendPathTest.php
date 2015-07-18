@@ -43,16 +43,60 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
+use PHPUnit_Framework_TestCase;
 use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
 
-class Exxx_DataContainerException extends RuntimeException
+/**
+ * @coversDefaultClass GanbaroDigital\DataContainers\Exceptions\E4xx_CannotDescendPath
+ */
+class E4xx_CannotDescendPathTest extends PHPUnit_Framework_TestCase
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * @covers ::__construct
+     */
+    public function testCanInstantiate()
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new E4xx_CannotDescendPath([], "one");
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($obj instanceof E4xx_CannotDescendPath);
     }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testInstanceOfE4xx_DataContainerException()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new E4xx_CannotDescendPath([], "one");
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($obj instanceof E4xx_DataContainerException);
+    }
+
+    /**
+     * @covers ::__construct
+     */
+    public function testInstanceOfExxx_DataContainerException()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new E4xx_CannotDescendPath([], "one");
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue($obj instanceof Exxx_DataContainerException);
+    }
+
 }

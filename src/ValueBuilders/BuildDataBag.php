@@ -34,25 +34,61 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Exceptions
+ * @package   DataContainers/ValueBuilders
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
+ * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Exceptions;
+namespace GanbaroDigital\DataContainers\ValueBuilders;
 
-use RuntimeException;
-use GanbaroDigital\Exceptions\ExceptionMessageData;
+use GanbaroDigital\DataContainers\Containers\DataBag;
+use GanbaroDigital\DataContainers\ValueBuilders\MergeDataBag;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 
-class Exxx_DataContainerException extends RuntimeException
+class BuildDataBag
 {
-    use ExceptionMessageData;
-
-    public function __construct($code, $message, $data = array())
+    /**
+     * create a DataBag from an array of data
+     *
+     * @param  array $item
+     *         the array to build from
+     * @return DataBag
+     */
+    public static function fromArray($item)
     {
-        parent::__construct($message, $code);
-        $this->setMessageData($data);
+        $retval = new DataBag;
+        MergeIntoAssignable::fromArray($retval, $item);
+        return $retval;
+    }
+
+    /**
+     * create a DataBag from an object containing data
+     *
+     * @param  object $item
+     *         the object to build from
+     * @return DataBag
+     */
+    public static function fromObject($item)
+    {
+        $retval = new DataBag;
+        MergeIntoAssignable::fromObject($retval, $item);
+        return $retval;
+    }
+
+    /**
+     * create a DataBag from another container
+     *
+     * @param  array|object $item
+     *         the container to extract from
+     * @return DataBag
+     */
+    public function __invoke($item)
+    {
+        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'from');
+        return self::$methodName($item);
     }
 }
