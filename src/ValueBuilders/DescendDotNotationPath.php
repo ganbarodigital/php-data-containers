@@ -158,12 +158,17 @@ class DescendDotNotationPath
      */
     private static function &getPathFromRoot(&$root, $path, $extendingItem)
     {
+        // to avoid recursion, this will track where we are in the tree
         $retval =& $root;
 
+        // this will track where we have been, in case we need to report on
+        // an error
         $visitedPath = [];
 
+        // explore the path
         $parts = explode(".", $path);
         foreach ($parts as $part) {
+            // make sure we have a valid container
             if (!IsReadableContainer::checkMixed($retval)) {
                 throw new E4xx_CannotDescendPath($retval, implode('.', $visitedPath));
             }
@@ -172,6 +177,7 @@ class DescendDotNotationPath
             $visitedPath[] = $part;
         }
 
+        // if we get here, then we have found what they are looking for
         return $retval;
     }
 
