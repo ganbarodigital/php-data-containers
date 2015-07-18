@@ -44,13 +44,17 @@
 
 namespace GanbaroDigital\DataContainers\ValueBuilders;
 
-use GanbaroDigital\DataContainers\Checks\ShouldOverwrite;
+use GanbaroDigital\DataContainers\Checks\IsDotNotationPath;
 use GanbaroDigital\DataContainers\Containers\DataBag;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_NotDotNotationPath;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\DataContainers\Filters\FilterDotNotationParts;
+use GanbaroDigital\DataContainers\Requirements\RequireDotNotationPath;
 use GanbaroDigital\DataContainers\ValueBuilders\DescendDotNotationPath;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
 use GanbaroDigital\Reflection\Checks\IsIndexable;
+use GanbaroDigital\Reflection\Requirements\RequireAssignable;
+use GanbaroDigital\Reflection\Requirements\RequireIndexable;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
 class MergeUsingDotNotationPath
@@ -73,14 +77,12 @@ class MergeUsingDotNotationPath
     public static function intoArray(&$arr, $path, $value, $extendingItem = null)
     {
         // robustness!
-        if (!IsIndexable::checkMixed($arr)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($arr));
-        }
+        RequireIndexable::checkMixed($arr, E4xx_UnsupportedType::class);
+        RequireDotNotationPath::checkMixed($path);
 
         // find the point where we want to merge
         list ($firstPart, $finalPart) = self::splitPathInTwo($path);
-        $leaf = DescendDotNotationPath::intoArray($arr, $firstPart, $extendingItem);
-
+        $leaf =& DescendDotNotationPath::intoArray($arr, $firstPart, $extendingItem);
         // merge it
         MergeIntoProperty::ofMixed($leaf, $finalPart, $value);
     }
@@ -103,13 +105,12 @@ class MergeUsingDotNotationPath
     public static function intoObject($obj, $path, $value, $extendingItem = null)
     {
         // robustness!
-        if (!IsAssignable::checkMixed($obj)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($obj));
-        }
+        RequireAssignable::checkMixed($obj, E4xx_UnsupportedType::class);
+        RequireDotNotationPath::checkMixed($path);
 
         // find the point where we want to merge
         list ($firstPart, $finalPart) = self::splitPathInTwo($path);
-        $leaf = DescendDotNotationPath::intoObject($obj, $firstPart, $extendingItem);
+        $leaf =& DescendDotNotationPath::intoObject($obj, $firstPart, $extendingItem);
 
         // merge it
         MergeIntoProperty::ofMixed($leaf, $finalPart, $value);
@@ -130,7 +131,7 @@ class MergeUsingDotNotationPath
      *         extend $ours?
      * @return void
      */
-    public static function intoMixed($ours, $path, $value, $extendingItem = null)
+    public static function intoMixed(&$ours, $path, $value, $extendingItem = null)
     {
         if (IsAssignable::checkMixed($ours)) {
             return self::intoObject($ours, $path, $value, $extendingItem);
@@ -157,7 +158,7 @@ class MergeUsingDotNotationPath
      *         extend $ours?
      * @return void
      */
-    public function __invoke($ours, $path, $value, $extendingItem = null)
+    public function __invoke(&$ours, $path, $value, $extendingItem = null)
     {
         return self::intoMixed($ours, $path, $value, $extendingItem);
     }
