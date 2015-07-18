@@ -43,7 +43,7 @@
 
 namespace GanbaroDigital\DataContainers\Exceptions;
 
-class E4xx_NoSuchIndex extends E4xx_DataContainerException
+class E4xx_NoSuchIndex extends E4xx_NoSuchContainedData
 {
     /**
      * exception thrown when a requested index cannot be found in an array
