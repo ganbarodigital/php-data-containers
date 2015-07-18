@@ -61,7 +61,7 @@ class MergeIntoAssignable
      *
      * @param  object $ours
      *         the object that we want to merge into
-     * @param  array $theirs
+     * @param  array|Traversable $theirs
      *         the array that we want to merge from
      * @return void
      */

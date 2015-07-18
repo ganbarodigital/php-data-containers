@@ -51,6 +51,13 @@ use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 
 class BuildDataBag
 {
+    /**
+     * create a DataBag from an array of data
+     *
+     * @param  array $item
+     *         the array to build from
+     * @return DataBag
+     */
     public static function fromArray($item)
     {
         $retval = new DataBag;
@@ -58,6 +65,13 @@ class BuildDataBag
         return $retval;
     }
 
+    /**
+     * create a DataBag from an object containing data
+     *
+     * @param  object $item
+     *         the object to build from
+     * @return DataBag
+     */
     public static function fromObject($item)
     {
         $retval = new DataBag;
@@ -65,6 +79,13 @@ class BuildDataBag
         return $retval;
     }
 
+    /**
+     * create a DataBag from another container
+     *
+     * @param  array|object $item
+     *         the container to extract from
+     * @return DataBag
+     */
     public function __invoke($item)
     {
         $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'from');

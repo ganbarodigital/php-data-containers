@@ -103,7 +103,7 @@ class FilterDotNotationPath
      *
      * @param  mixed $item
      *         the container to extract from
-     * @param  string $property
+     * @param  string $path
      *         the dot.notation.support path to walk
      * @return mixed
      *         whatever we find when we walk the path

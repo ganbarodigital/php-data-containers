@@ -89,7 +89,7 @@ class MergeUsingDotNotationPath
      * merge their data into our object, using dot.notation.support to
      * find the point where the merge starts
      *
-     * @param  object $ours
+     * @param  object $obj
      *         the object that we want to merge into
      * @param  string $path
      *         the dot.notation.support path to where the merge should start
@@ -159,7 +159,7 @@ class MergeUsingDotNotationPath
      */
     public function __invoke($ours, $path, $value, $extendingItem = null)
     {
-        return self::fromMixed($ours, $path, $value, $extendingItem);
+        return self::intoMixed($ours, $path, $value, $extendingItem);
     }
 
     /**
