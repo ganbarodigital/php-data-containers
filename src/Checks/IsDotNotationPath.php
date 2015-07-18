@@ -48,7 +48,7 @@ use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
-class IsDotNotation
+class IsDotNotationPath
 {
     /**
      * do we have a dot.notation string at all?

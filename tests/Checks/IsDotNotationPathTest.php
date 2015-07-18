@@ -47,9 +47,9 @@ use PHPUnit_Framework_TestCase;
 use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\Checks\IsDotNotation
+ * @coversDefaultClass GanbaroDigital\DataContainers\Checks\IsDotNotationPath
  */
-class IsDotNotationTest extends PHPUnit_Framework_TestCase
+class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @coversNothing
@@ -64,12 +64,12 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $obj = new IsDotNotation;
+        $obj = new IsDotNotationPath;
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof IsDotNotation);
+        $this->assertTrue($obj instanceof IsDotNotationPath);
     }
 
     /**
@@ -81,7 +81,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $obj = new IsDotNotation;
+        $obj = new IsDotNotationPath;
 
         // ----------------------------------------------------------------
         // perform the change
@@ -105,7 +105,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = IsDotNotation::inString('dot.notation.support');
+        $actualResult = IsDotNotationPath::inString('dot.notation.support');
 
         // ----------------------------------------------------------------
         // test the results
@@ -125,13 +125,13 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $isDotNotation = IsDotNotation::inString('dot.notation.support');
-        $isNotDotNotation = IsDotNotation::inString('dotNotationSupport');
+        $IsDotNotationPath = IsDotNotationPath::inString('dot.notation.support');
+        $isNotDotNotation = IsDotNotationPath::inString('dotNotationSupport');
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($isDotNotation);
+        $this->assertTrue($IsDotNotationPath);
         $this->assertFalse($isNotDotNotation);
     }
 
@@ -147,7 +147,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $isNotDotNotation = IsDotNotation::inString('dotNotationSupport.');
+        $isNotDotNotation = IsDotNotationPath::inString('dotNotationSupport.');
 
         // ----------------------------------------------------------------
         // test the results
@@ -168,7 +168,7 @@ class IsDotNotationTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        IsDotNotation::inString($path);
+        IsDotNotationPath::inString($path);
     }
 
     public function provideNonStrings()

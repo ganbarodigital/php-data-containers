@@ -48,9 +48,9 @@ use ArrayIterator;
 use IteratorAggregate;
 use stdClass;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty;
-use GanbaroDigital\DataContainers\Checks\IsDotNotation;
-use GanbaroDigital\DataContainers\Filters\FilterDotNotation;
-use GanbaroDigital\DataContainers\ValueBuilders\MergeUsingDotNotation;
+use GanbaroDigital\DataContainers\Checks\IsDotNotationPath;
+use GanbaroDigital\DataContainers\Filters\FilterDotNotationPath;
+use GanbaroDigital\DataContainers\ValueBuilders\MergeUsingDotNotationPath;
 
 /**
  * The DataBag is based on the BaseObject that I built for Datasift's
@@ -76,8 +76,8 @@ class DataBag extends stdClass implements IteratorAggregate
     public function __get($propertyName)
     {
         // is the user trying to use dot.notation?
-        if (IsDotNotation::inString($propertyName)) {
-            return FilterDotNotation::fromObject($this, $propertyName);
+        if (IsDotNotationPath::inString($propertyName)) {
+            return FilterDotNotationPath::fromObject($this, $propertyName);
         }
 
         // if we get here, then we have no idea what you are trying to get
@@ -100,8 +100,8 @@ class DataBag extends stdClass implements IteratorAggregate
     public function __set($propertyName, $propertyValue)
     {
         // is the user trying to use dot.notation?
-        if (IsDotNotation::inString($propertyName)) {
-            return MergeUsingDotNotation::intoObject($this, $propertyName, $propertyValue, DataBag::class);
+        if (IsDotNotationPath::inString($propertyName)) {
+            return MergeUsingDotNotationPath::intoObject($this, $propertyName, $propertyValue, DataBag::class);
         }
 
         // if we get here, then we simply have a new property to set
