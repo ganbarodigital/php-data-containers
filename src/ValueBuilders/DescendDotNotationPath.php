@@ -44,10 +44,13 @@
 
 namespace GanbaroDigital\DataContainers\ValueBuilders;
 
+use GanbaroDigital\DataContainers\Checks\IsReadableContainer;
+use GanbaroDigital\DataContainers\Exceptions\E4xx_CannotDescendPath;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchIndex;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
+use GanbaroDigital\Reflection\Checks\IsIndexable;
 use GanbaroDigital\Reflection\Checks\IsTraversable;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
@@ -68,15 +71,11 @@ class DescendDotNotationPath
      */
     public static function intoArray(&$arr, $index, $extendingItem = null)
     {
-        try {
-            return self::getPathFromRoot($arr, $index, $extendingItem);
+        if (!IsIndexable::checkMixed($arr)) {
+            throw new E4xx_UnsupportedType(SimpleType::fromMixed($arr));
         }
-        catch (E4xx_NoSuchIndex $e) {
-            throw new E4xx_NoSuchIndex('array', $index);
-        }
-        catch (E4xx_NoSuchProperty $e) {
-            throw new E4xx_NoSuchIndex('array', $index);
-        }
+
+        return self::getPathFromRoot($arr, $index, $extendingItem);
     }
 
     /**
@@ -93,15 +92,11 @@ class DescendDotNotationPath
      */
     public static function intoObject($obj, $property, $extendingItem = null)
     {
-        try {
-            return self::getPathFromRoot($obj, $property, $extendingItem);
+        if (!IsAssignable::checkMixed($obj)) {
+            throw new E4xx_UnsupportedType(SimpleType::fromMixed($obj));
         }
-        catch (E4xx_NoSuchIndex $e) {
-            throw new E4xx_NoSuchProperty($obj, $property);
-        }
-        catch (E4xx_NoSuchProperty $e) {
-            throw new E4xx_NoSuchProperty($obj, $property);
-        }
+
+        return self::getPathFromRoot($obj, $property, $extendingItem);
     }
 
     /**
@@ -150,7 +145,7 @@ class DescendDotNotationPath
      * get whatever is at the end of the given dot.notation.support path,
      * optionally extending the path as required
      *
-     * @param  array|object $root
+     * @param  array|object &$root
      *         where we start from
      * @param  string $path
      *         the dot.notation.support path to descend
@@ -158,27 +153,52 @@ class DescendDotNotationPath
      *         if we need to extend, what data type do we extend using?
      * @return mixed
      */
-    private static function &getPathFromRoot($root, $path, $extendingItem)
+    private static function getPathFromRoot(&$root, $path, $extendingItem)
     {
-        $parts = explode(".", $path);
+        // to avoid recursion, this will track where we are in the tree
         $retval = $root;
+
+        // this will track where we have been, in case we need to report on
+        // an error
+        $visitedPath = [];
+
+        // explore the path
+        $parts = explode(".", $path);
         foreach ($parts as $part) {
-            if (is_object($retval)) {
-                $retval = self::getPartFromObject($retval, $part, $extendingItem);
+            // make sure we have a valid container
+            if (!IsReadableContainer::checkMixed($retval)) {
+                throw new E4xx_CannotDescendPath($retval, implode('.', $visitedPath));
             }
-            else if (is_array($retval)) {
-                $retval = self::getPartFromArray($retval, $part, $extendingItem);
-            }
-            else if ($extendingItem !== null) {
-                throw new E4xx_CannotExtendPath($root, $path, $part);
-            }
-            else {
-                throw new E4xx_NoSuchProperty($root, $path);
-            }
+
+            $retval = self::getChildFromPart($retval, $part, $extendingItem);
+            $visitedPath[] = $part;
         }
 
         // if we get here, then we have found what they are looking for
         return $retval;
+    }
+
+    /**
+     * get a child from part of our container tree, optionally extending
+     * the container if needed
+     *
+     * @param  array|object &$container
+     *         the container we want to get the child from
+     * @param  string $part
+     *         the name of the child that we want
+     * @param  array|callable|string|null $extendingItem
+     *         if we need to extend the container, this is what we use to
+     *         do the extension
+     * @return mixed
+     */
+    private static function getChildFromPart(&$container, $part, $extendingItem = null)
+    {
+        if (IsAssignable::checkMixed($container)) {
+            return self::getPartFromObject($container, $part, $extendingItem);
+        }
+
+        // if we get here, this must be an array
+        return self::getPartFromArray($container, $part, $extendingItem);
     }
 
     /**

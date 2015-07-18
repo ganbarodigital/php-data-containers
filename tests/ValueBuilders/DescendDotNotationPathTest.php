@@ -73,6 +73,7 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
+     * @covers ::getPathFromRoot
      * @dataProvider provideContainersAndPaths
      */
     public function testCanUseAsObject($container, $path, $expectedResult)
@@ -190,6 +191,42 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::intoArray
+     * @dataProvider provideNonIndexables
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     */
+    public function testThrowsExceptionIfIntoArrayCalledStaticallyWithNonIndexable($container)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        DescendDotNotationPath::intoArray($container, 'one.two');
+    }
+
+    /**
+     * @covers ::intoObject
+     * @dataProvider provideNonAssignables
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     */
+    public function testThrowsExceptionIfIntoObjectCalledStaticallyWithNonAssignable($container)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        DescendDotNotationPath::intoObject($container, 'one.two');
+    }
+
+    /**
      * @covers ::getPartFromObject
      */
     public function testCanTraverseObjects()
@@ -204,6 +241,45 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
         // perform the change
 
         $actualResult = InvokeMethod::onClass(DescendDotNotationPath::class, 'getPartFromObject', [ $obj, "one" ]);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
+     * @covers ::getPartFromArray
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchIndex
+     */
+    public function testThrowsExceptionWhenArrayDoesNotContainPart()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $arr = [ "one" => 1, "two" => 2 ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = InvokeMethod::onClass(DescendDotNotationPath::class, 'getPartFromArray', [ &$arr, "three" ]);
+    }
+
+    /**
+     * @covers ::getPartFromArray
+     */
+    public function testCanTraverseArrays()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $arr = [ "one" => 1, "two" => 2 ];
+        $expectedResult = 1;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = InvokeMethod::onClass(DescendDotNotationPath::class, 'getPartFromArray', [ &$arr, "one" ]);
 
         // ----------------------------------------------------------------
         // test the results
@@ -230,6 +306,8 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::intoArray
+     * @covers ::getPathFromRoot
+     * @covers ::getChildFromPart
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchIndex
      */
     public function testThrowsExceptionWhenChildArrayOfArrayDoesNotMatchPath()
@@ -247,7 +325,9 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::intoArray
-     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchIndex
+     * @covers ::getPathFromRoot
+     * @covers ::getChildFromPart
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty
      */
     public function testThrowsExceptionWhenChildObjectOfArrayDoesNotMatchPath()
     {
@@ -262,6 +342,134 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
         DescendDotNotationPath::intoArray($data, "one.three");
     }
 
+    /**
+     * @covers ::intoObject
+     * @covers ::getPathFromRoot
+     * @covers ::getChildFromPart
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchIndex
+     */
+    public function testThrowsExceptionWhenChildArrayOfObjectDoesNotMatchPath()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = (object)[ "one" => [ "two" => 2 ] ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        DescendDotNotationPath::intoObject($data, "one.three");
+    }
+
+    /**
+     * @covers ::intoObject
+     * @covers ::getPathFromRoot
+     * @covers ::getChildFromPart
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty
+     */
+    public function testThrowsExceptionWhenChildObjectOfObjectDoesNotMatchPath()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $data = (object)[ "one" => (object)[ "two" => 2] ];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        DescendDotNotationPath::intoObject($data, "one.three");
+    }
+
+    /**
+     * @covers ::getPartFromArray
+     * @covers ::getExtension
+     */
+    public function testCanExtendArrayUsingArray()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $arr = [ "one" => 1, "two" => 2];
+        $expectedResult = [];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = InvokeMethod::onClass(
+            DescendDotNotationPath::class,
+            'getPartFromArray',
+            [ &$arr, "three", [] ]
+        );
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertTrue(isset($arr['three']));
+        $this->assertTrue(is_array($arr['three']));
+    }
+
+    /**
+     * @covers ::getPartFromArray
+     * @covers ::getExtension
+     */
+    public function testCanExtendArrayUsingCallable()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $arr = [ "one" => 1, "two" => 2];
+        $callable = function() {
+            return "extended!";
+        };
+
+        $expectedResult = $callable();
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = InvokeMethod::onClass(
+            DescendDotNotationPath::class,
+            'getPartFromArray',
+            [ &$arr, "three", $callable ]
+        );
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertTrue(isset($arr['three']));
+        $this->assertEquals($expectedResult, $arr['three']);
+    }
+
+    /**
+     * @covers ::getPartFromArray
+     * @covers ::getExtension
+     */
+    public function testCanExtendArrayUsingClassname()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $arr = [ "one" => 1, "two" => 2];
+        $expectedResult = new stdClass;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $actualResult = InvokeMethod::onClass(
+            DescendDotNotationPath::class,
+            'getPartFromArray',
+            [ &$arr, "three", stdClass::class ]
+        );
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertTrue(isset($arr['three']));
+        $this->assertTrue($arr['three'] instanceof stdClass);
+    }
 
     /**
      * @covers ::getPartFromObject
@@ -354,6 +562,25 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($obj->three instanceof stdClass);
     }
 
+    /**
+     * @covers ::getPathFromRoot
+     * @dataProvider provideUnextendablePaths
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_CannotDescendPath
+     */
+    public function testThrowsExceptionWhenAttemptingToExtendNonContainer($container, $path)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        DescendDotNotationPath::intoMixed($container, $path, []);
+
+    }
+
     public function provideContainersAndPaths()
     {
         return array_merge(
@@ -404,6 +631,53 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
             [ 100 ],
             [ fopen("php://input", "r") ],
             [ "hello, world!" ]
+        ];
+    }
+
+    public function provideNonAssignables()
+    {
+        return [
+            [ null ],
+            [ [] ],
+            [ false ],
+            [ true ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ fopen("php://input", "r") ],
+            [ "hello, world!" ]
+        ];
+    }
+
+    public function provideNonIndexables()
+    {
+        return [
+            [ null ],
+            [ false ],
+            [ true ],
+            [ 3.1415927 ],
+            [ 100 ],
+            [ new stdClass ],
+            [ fopen("php://input", "r") ],
+            [ "hello, world!" ]
+        ];
+    }
+
+    public function provideUnextendablePaths()
+    {
+        $arrContainer = [
+            "one" => 1,
+            "two" => 2,
+            "three" => [ 1, 2, 3 => [ 4, 5, 6 ]]
+        ];
+        $objContainer = (object)[
+            "one" => 1,
+            "two" => 2,
+            "three" => [ 1, 2, 3 => [ 4, 5, 6 ]]
+        ];
+
+        return [
+            [ $arrContainer, "three.1.4" ],
+            [ $objContainer, "three.1.4" ],
         ];
     }
 }
