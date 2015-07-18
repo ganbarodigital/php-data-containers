@@ -18,6 +18,7 @@ We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes 
 * Filters\FilterDotNotationPath added
 * Filters\FilterDotNotationParts added
 * Requirements\RequireDotNotationPath added
+* Requirements\RequireReadableContainer added
 * ValueBuilders\BuildDataBag added
 * ValueBuilders\DescendDotNotationPath added
 * ValueBuilders\MergeIntoAssignable added
