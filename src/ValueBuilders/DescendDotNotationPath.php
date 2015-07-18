@@ -69,13 +69,14 @@ class DescendDotNotationPath
      *         if we need to extend, what data type do we extend using?
      * @return mixed
      */
-    public static function intoArray(&$arr, $index, $extendingItem = null)
+    public static function &intoArray(&$arr, $index, $extendingItem = null)
     {
         if (!IsIndexable::checkMixed($arr)) {
             throw new E4xx_UnsupportedType(SimpleType::fromMixed($arr));
         }
 
-        return self::getPathFromRoot($arr, $index, $extendingItem);
+        $retval =& self::getPathFromRoot($arr, $index, $extendingItem);
+        return $retval;
     }
 
     /**
@@ -90,20 +91,21 @@ class DescendDotNotationPath
      *         if we need to extend, what data type do we extend using?
      * @return mixed
      */
-    public static function intoObject($obj, $property, $extendingItem = null)
+    public static function &intoObject($obj, $property, $extendingItem = null)
     {
         if (!IsAssignable::checkMixed($obj)) {
             throw new E4xx_UnsupportedType(SimpleType::fromMixed($obj));
         }
 
-        return self::getPathFromRoot($obj, $property, $extendingItem);
+        $retval =& self::getPathFromRoot($obj, $property, $extendingItem);
+        return $retval;
     }
 
     /**
      * descend inside a container, using dot.notation.support, and optionally
      * extending the container if the end of the dot.notation.path is missing
      *
-     * @param  mixed $item
+     * @param  mixed &$item
      *         the container to dig into
      * @param  string $property
      *         the dot.notation.support path to descend
@@ -111,13 +113,15 @@ class DescendDotNotationPath
      *         if we need to extend, what data type do we extend using?
      * @return mixed
      */
-    public static function intoMixed($item, $property, $extendingItem = null)
+    public static function &intoMixed(&$item, $property, $extendingItem = null)
     {
         if (IsAssignable::checkMixed($item)) {
-            return self::intoObject($item, $property, $extendingItem);
+            $retval =& self::intoObject($item, $property, $extendingItem);
+            return $retval;
         }
         if (IsTraversable::checkMixed($item)) {
-            return self::intoArray($item, $property, $extendingItem);
+            $retval =& self::intoArray($item, $property, $extendingItem);
+            return $retval;
         }
 
         throw new E4xx_UnsupportedType(SimpleType::fromMixed($item));
@@ -127,7 +131,7 @@ class DescendDotNotationPath
      * descend inside a variable, using dot.notation.support, and optionally
      * extending the variable if the end of the dot.notation.path is missing
      *
-     * @param  object|array $item
+     * @param  object|array &$item
      *         the variable to dig into
      * @param  string $path
      *         the dot.notation.support path to descend
@@ -135,10 +139,11 @@ class DescendDotNotationPath
      *         if we need to extend, what data type do we extend using?
      * @return mixed
      */
-    public function __invoke($item, $path, $extendingItem = null)
+    public function &__invoke($item, $path, $extendingItem = null)
     {
         $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'into');
-        return self::$methodName($item, $path, $extendingItem);
+        $retval = self::$methodName($item, $path, $extendingItem);
+        return $retval;
     }
 
     /**
@@ -153,10 +158,10 @@ class DescendDotNotationPath
      *         if we need to extend, what data type do we extend using?
      * @return mixed
      */
-    private static function getPathFromRoot(&$root, $path, $extendingItem)
+    private static function &getPathFromRoot(&$root, $path, $extendingItem)
     {
         // to avoid recursion, this will track where we are in the tree
-        $retval = $root;
+        $retval =& $root;
 
         // this will track where we have been, in case we need to report on
         // an error
@@ -170,7 +175,7 @@ class DescendDotNotationPath
                 throw new E4xx_CannotDescendPath($retval, implode('.', $visitedPath));
             }
 
-            $retval = self::getChildFromPart($retval, $part, $extendingItem);
+            $retval =& self::getChildFromPart($retval, $part, $extendingItem);
             $visitedPath[] = $part;
         }
 
@@ -191,14 +196,15 @@ class DescendDotNotationPath
      *         do the extension
      * @return mixed
      */
-    private static function getChildFromPart(&$container, $part, $extendingItem = null)
+    private static function &getChildFromPart(&$container, $part, $extendingItem = null)
     {
         if (IsAssignable::checkMixed($container)) {
             return self::getPartFromObject($container, $part, $extendingItem);
         }
 
         // if we get here, this must be an array
-        return self::getPartFromArray($container, $part, $extendingItem);
+        $retval =& self::getPartFromArray($container, $part, $extendingItem);
+        return $retval;
     }
 
     /**
