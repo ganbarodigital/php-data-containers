@@ -6,12 +6,18 @@
 
 We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes with full dot.notation.support :)
 
+* Checks\IsDotNotationPath added
+* Checks\IsReadableContainer added
 * Containers\DataBag added
+* Exceptions\E4xx_CannotDescendPath added
+* Exceptions\E4xx_NoSuchContainedData added
 * Exceptions\E4xx_NoSuchIndex added
 * Exceptions\E4xx_NoSuchProperty added
 * Exceptions\E4xx_UnsupportedType added
+* Filters\FilterDotNotationPath added
 * Filters\FilterDotNotationParts added
 * ValueBuilders\BuildDataBag added
+* ValueBuilders\DescendDotNotationPath added
 * ValueBuilders\MergeIntoAssignable added
 * ValueBuilders\MergeIntoIndexable added
 * ValueBuilders\MergeIntoProperty added
