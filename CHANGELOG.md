@@ -21,6 +21,7 @@ We have a new DataBag (based on the old DataSift/Stone BaseObject), which comes 
 * ValueBuilders\MergeIntoAssignable added
 * ValueBuilders\MergeIntoIndexable added
 * ValueBuilders\MergeIntoProperty added
+* ValueBuilders\MergeUsingDotNotationPath added
 
 The following Internal classes were also added:
 
