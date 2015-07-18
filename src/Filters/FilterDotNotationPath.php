@@ -46,9 +46,12 @@ namespace GanbaroDigital\DataContainers\Filters;
 
 use GanbaroDigital\DataContainers\Checks\IsReadableContainer;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\DataContainers\Requirements\RequireReadableContainer;
 use GanbaroDigital\DataContainers\ValueBuilders\DescendDotNotationPath;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
 use GanbaroDigital\Reflection\Checks\IsIndexable;
+use GanbaroDigital\Reflection\Requirements\RequireAssignable;
+use GanbaroDigital\Reflection\Requirements\RequireIndexable;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
@@ -71,9 +74,7 @@ class FilterDotNotationPath
     public static function fromArray($arr, $index)
     {
         // robustness!
-        if (!IsIndexable::checkMixed($arr)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($arr));
-        }
+        RequireIndexable::checkMixed($arr, E4xx_UnsupportedType::class);
 
         return DescendDotNotationPath::intoArray($arr, $index);
     }
@@ -91,9 +92,7 @@ class FilterDotNotationPath
     public static function fromObject($obj, $property)
     {
         // robustness!
-        if (!IsAssignable::checkMixed($obj)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($obj));
-        }
+        RequireAssignable::checkMixed($obj, E4xx_UnsupportedType::class);
 
         return DescendDotNotationPath::intoObject($obj, $property);
     }
@@ -110,9 +109,8 @@ class FilterDotNotationPath
      */
     public static function fromMixed($item, $path)
     {
-        if (!IsReadableContainer::checkMixed($item)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($item));
-        }
+        // robustness!
+        RequireReadableContainer::checkMixed($item, E4xx_UnsupportedType::class);
 
         if (IsAssignable::checkMixed($item)) {
             return self::fromObject($item, $path);
@@ -133,7 +131,6 @@ class FilterDotNotationPath
      */
     public function __invoke($item, $property)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'from');
-        return self::$methodName($item, $property);
+        return self::fromMixed($item, $property);
     }
 }
