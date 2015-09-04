@@ -104,7 +104,7 @@ class RequireDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      * @dataProvider provideDotNotationPaths
      */
     public function testCanCallStatically($item)
@@ -115,7 +115,7 @@ class RequireDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireDotNotationPath::checkMixed($item);
+        RequireDotNotationPath::check($item);
     }
 
     /**
@@ -137,7 +137,7 @@ class RequireDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      * @dataProvider provideNonStrings
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      */
@@ -149,7 +149,7 @@ class RequireDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireDotNotationPath::checkMixed($item);
+        RequireDotNotationPath::check($item);
     }
 
     /**
@@ -171,7 +171,7 @@ class RequireDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      * @dataProvider provideNonDotNotationPaths
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NotDotNotationPath
      */
@@ -183,7 +183,7 @@ class RequireDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireDotNotationPath::checkMixed($item);
+        RequireDotNotationPath::check($item);
     }
 
     public function provideDotNotationPaths()

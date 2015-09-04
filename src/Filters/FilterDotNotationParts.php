@@ -88,9 +88,26 @@ class FilterDotNotationParts
      * @return string
      *         the extracted parts
      */
+    public static function from($dotNotation, $start, $len)
+    {
+        $methodName = FirstMethodMatchingType::from($dotNotation, self::class, 'from', E4xx_UnsupportedType::class);
+        return self::$methodName($dotNotation, $start, $len);
+    }
+
+    /**
+     * extract all but the end of a dot.notation.support string
+     *
+     * @param  mixed $dotNotation
+     *         the string to extract from
+     * @param  int $start
+     *         which part do we want to start from?
+     * @param  int $len
+     *         how many parts do we want?
+     * @return string
+     *         the extracted parts
+     */
     public function __invoke($dotNotation, $start, $len)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($dotNotation, get_class($this), 'from');
-        return self::$methodName($dotNotation, $start, $len);
+        return self::from($dotNotation, $start, $len);
     }
 }

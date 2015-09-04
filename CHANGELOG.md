@@ -4,6 +4,13 @@
 
 Nothing yet.
 
+## v2.2.0 - Fri Sep 4 2015
+
+### New
+
+* We now have generic static methods in all our classes.
+* The ::xxxMixed() methods are now deprecated.
+
 ## v2.1.0 - Sat Jul 18 2015
 
 ### New

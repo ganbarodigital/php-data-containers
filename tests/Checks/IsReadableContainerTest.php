@@ -76,7 +76,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::checkMixed
+     * @covers ::check
      */
     public function testCanUseAsObject()
     {
@@ -97,7 +97,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      */
     public function testCanCallStatically()
     {
@@ -107,7 +107,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = IsReadableContainer::checkMixed([]);
+        $actualResult = IsReadableContainer::check([]);
 
         // ----------------------------------------------------------------
         // test the results
@@ -116,7 +116,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      */
     public function testReportsArraysAsReadableContainers()
     {
@@ -126,7 +126,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = IsReadableContainer::checkMixed([]);
+        $actualResult = IsReadableContainer::check([]);
 
         // ----------------------------------------------------------------
         // test the results
@@ -135,7 +135,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      */
     public function testReportsArrayObjectsAsReadableContainers()
     {
@@ -147,7 +147,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = IsReadableContainer::checkMixed($data);
+        $actualResult = IsReadableContainer::check($data);
 
         // ----------------------------------------------------------------
         // test the results
@@ -156,7 +156,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      */
     public function testReportsDataBagAsReadableContainers()
     {
@@ -168,7 +168,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = IsReadableContainer::checkMixed($data);
+        $actualResult = IsReadableContainer::check($data);
 
         // ----------------------------------------------------------------
         // test the results
@@ -177,7 +177,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      * @dataProvider provideScalars
      */
     public function testReportsScalarsAsNotReadableContainers($data)
@@ -188,7 +188,7 @@ class IsReadableContainerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = IsReadableContainer::checkMixed($data);
+        $actualResult = IsReadableContainer::check($data);
 
         // ----------------------------------------------------------------
         // test the results

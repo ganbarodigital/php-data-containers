@@ -69,8 +69,8 @@ class MergeIntoIndexable
     public static function fromArray(&$ours, $theirs)
     {
         // robustness!
-        RequireIndexable::checkMixed($ours, E4xx_UnsupportedType::class);
-        RequireTraversable::checkMixed($theirs, E4xx_UnsupportedType::class);
+        RequireIndexable::check($ours, E4xx_UnsupportedType::class);
+        RequireTraversable::check($theirs, E4xx_UnsupportedType::class);
 
         // copy from them to us
         foreach ($theirs as $key => $value) {
@@ -101,13 +101,13 @@ class MergeIntoIndexable
 
         // special case - we are merging into an object
         if (is_object($ours[$key])) {
-            MergeIntoAssignable::fromMixed($ours[$key], $value);
+            MergeIntoAssignable::from($ours[$key], $value);
             return;
         }
 
         // at this point, we are merging into an array, using recursion
         // for which I am going to hell
-        MergeIntoIndexable::fromMixed($ours[$key], $value);
+        MergeIntoIndexable::from($ours[$key], $value);
     }
 
     /**
@@ -122,7 +122,7 @@ class MergeIntoIndexable
     public static function fromObject(&$ours, $theirs)
     {
         // robustness!
-        RequireAssignable::checkMixed($theirs, E4xx_UnsupportedType::class);
+        RequireAssignable::check($theirs, E4xx_UnsupportedType::class);
 
         self::fromArray($ours, get_object_vars($theirs));
     }
@@ -136,18 +136,35 @@ class MergeIntoIndexable
      *         the data that we want to merge from
      * @return void
      */
-    public static function fromMixed(&$ours, $theirs)
+    public static function from(&$ours, $theirs)
     {
-        if (IsAssignable::checkMixed($theirs)) {
+        if (IsAssignable::check($theirs)) {
             return self::fromObject($ours, $theirs);
         }
 
-        if (IsTraversable::checkMixed($theirs)) {
+        if (IsTraversable::check($theirs)) {
             return self::fromArray($ours, $theirs);
         }
 
         // cannot merge anything that reaches here!
-        throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
+        throw new E4xx_UnsupportedType(SimpleType::from($ours));
+    }
+
+    /**
+     * merge their data into our array
+     *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
+     * @param  array &$ours
+     *         the array that we want to merge into
+     * @param  array|object $theirs
+     *         the data that we want to merge from
+     * @return void
+     */
+    public static function fromMixed(&$ours, $theirs)
+    {
+        return self::from($ours, $theirs);
     }
 
     /**
@@ -161,7 +178,6 @@ class MergeIntoIndexable
      */
     public function __invoke(&$ours, $theirs)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($theirs, get_class($this), 'from');
-        return self::$methodName($ours, $theirs);
+        return self::from($ours, $theirs);
     }
 }

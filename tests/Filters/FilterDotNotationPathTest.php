@@ -95,7 +95,7 @@ class FilterDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromMixed
+     * @covers ::from
      * @dataProvider provideContainersAndPaths
      */
     public function testCanCallStatically($container, $path, $expectedResult)
@@ -106,7 +106,7 @@ class FilterDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = FilterDotNotationPath::fromMixed($container, $path, $expectedResult);
+        $actualResult = FilterDotNotationPath::from($container, $path, $expectedResult);
 
         // ----------------------------------------------------------------
         // test the results
@@ -115,7 +115,7 @@ class FilterDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromMixed
+     * @covers ::from
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideNonContainers
      */
@@ -129,7 +129,7 @@ class FilterDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        FilterDotNotationPath::fromMixed($container, "one");
+        FilterDotNotationPath::from($container, "one");
     }
 
     /**

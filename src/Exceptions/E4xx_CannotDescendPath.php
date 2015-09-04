@@ -51,7 +51,7 @@ class E4xx_CannotDescendPath extends E4xx_DataContainerException
 {
     public function __construct($item, $path)
     {
-        $type = SimpleType::fromMixed($item);
+        $type = SimpleType::from($item);
         $msg = "'{$type}' at path '{$path}' is not a container";
 
         parent::__construct(400, $msg);

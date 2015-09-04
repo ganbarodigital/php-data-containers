@@ -73,6 +73,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
+     * @covers ::from
      * @covers ::fromString
      */
     public function testCanUseAsObject()
@@ -95,6 +96,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::from
      * @covers ::fromString
      */
     public function testCanCallStatically()
@@ -107,7 +109,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = FilterDotNotationParts::fromString($expectedResult, 0, 3);
+        $actualResult = FilterDotNotationParts::from($expectedResult, 0, 3);
 
         // ----------------------------------------------------------------
         // test the results
@@ -116,6 +118,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::from
      * @covers ::fromString
      */
     public function testCanGetStartOfPath()
@@ -129,7 +132,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = FilterDotNotationParts::fromString($data, 0, 1);
+        $actualResult = FilterDotNotationParts::from($data, 0, 1);
 
         // ----------------------------------------------------------------
         // test the results
@@ -138,6 +141,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::from
      * @covers ::fromString
      */
     public function testCanGetEndOfPath()
@@ -151,7 +155,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = FilterDotNotationParts::fromString($data, -1, 1);
+        $actualResult = FilterDotNotationParts::from($data, -1, 1);
 
         // ----------------------------------------------------------------
         // test the results
@@ -160,6 +164,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::from
      * @covers ::fromString
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideNonIntegers
@@ -174,10 +179,11 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        FilterDotNotationParts::fromString('dot.notation.support', $start, 1);
+        FilterDotNotationParts::from('dot.notation.support', $start, 1);
     }
 
     /**
+     * @covers ::from
      * @covers ::fromString
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideNonIntegers
@@ -192,7 +198,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        FilterDotNotationParts::fromString('dot.notation.support', 0, $len);
+        FilterDotNotationParts::from('dot.notation.support', 0, $len);
     }
 
     public function provideNonIntegers()

@@ -86,9 +86,21 @@ class BuildDataBag
      *         the container to extract from
      * @return DataBag
      */
+    public static function from($item)
+    {
+        $methodName = FirstMethodMatchingType::from($item, self::class, 'from');
+        return self::$methodName($item);
+    }
+
+    /**
+     * create a DataBag from another container
+     *
+     * @param  array|object $item
+     *         the container to extract from
+     * @return DataBag
+     */
     public function __invoke($item)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'from');
-        return self::$methodName($item);
+        return self::from($item);
     }
 }

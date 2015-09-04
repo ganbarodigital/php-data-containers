@@ -94,7 +94,7 @@ class MergeUsingDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::intoMixed
+     * @covers ::into
      * @dataProvider provideMergeables
      */
     public function testCanCallStatically($ours, $path, $theirs, $expectedResult)
@@ -106,7 +106,7 @@ class MergeUsingDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeUsingDotNotationPath::intoMixed($ours, $path, $theirs);
+        MergeUsingDotNotationPath::into($ours, $path, $theirs);
 
         // ----------------------------------------------------------------
         // test the results
@@ -157,7 +157,7 @@ class MergeUsingDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::intoMixed
+     * @covers ::into
      * @dataProvider provideNonIndexableNorAssignable
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      */
@@ -172,7 +172,7 @@ class MergeUsingDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeUsingDotNotationPath::intoMixed($container, $path, $theirs);
+        MergeUsingDotNotationPath::into($container, $path, $theirs);
     }
 
 

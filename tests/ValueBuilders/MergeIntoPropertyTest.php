@@ -72,7 +72,7 @@ class MergeIntoPropertyTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::ofMixed
+     * @covers ::of
      */
     public function testCanUseAsObjectWithArray()
     {
@@ -98,7 +98,7 @@ class MergeIntoPropertyTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::ofMixed
+     * @covers ::of
      */
     public function testCanUseAsObjectWithObject()
     {
@@ -124,7 +124,7 @@ class MergeIntoPropertyTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::ofMixed
+     * @covers ::of
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideNonIndexableNorAssignable
      */

@@ -70,8 +70,7 @@ class ShouldOverwrite
      */
     public function __invoke($ours, $property, $theirs)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($ours, get_class($this), 'into');
-        return self::$methodName($ours, $property, $theirs);
+        return self::into($ours, $property, $theirs);
     }
 
     /**
@@ -90,16 +89,34 @@ class ShouldOverwrite
      *         FALSE if we should merge $value into the property's exist
      *         value
      */
+    public static function into($ours, $property, $theirs)
+    {
+        $methodName = FirstMethodMatchingType::from($ours, self::class, 'into', E4xx_UnsupportedType::class);
+        return self::$methodName($ours, $property, $theirs);
+    }
+
+    /**
+     * should we overwrite $ours's $property with the value of $theirs?
+     *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
+     * @param  mixed $ours
+     *         the variable where $property may exist
+     * @param  string $property
+     *         the property on $ours whose fate we are deciding
+     * @param  mixed $theirs
+     *         the data we want to assign to the property
+     * @return boolean
+     *         TRUE if we should overwrite the property's existing value
+     *         with $value
+     *         TRUE if $property currently has no value
+     *         FALSE if we should merge $value into the property's exist
+     *         value
+     */
     public static function intoMixed($ours, $property, $theirs)
     {
-        if (IsIndexable::checkMixed($ours)) {
-            return self::intoArray($ours, $property, $theirs);
-        }
-        if (IsAssignable::checkMixed($ours)) {
-            return self::intoObject($ours, $property, $theirs);
-        }
-
-        throw new E4xx_UnsupportedType(gettype($ours));
+        return self::into($ours, $property, $theirs);
     }
 
     /**
@@ -121,8 +138,8 @@ class ShouldOverwrite
     public static function intoObject($ours, $property, $theirs)
     {
         // robustness!
-        if (!IsAssignable::checkMixed($ours)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
+        if (!IsAssignable::check($ours)) {
+            throw new E4xx_UnsupportedType(SimpleType::from($ours));
         }
 
         return self::checkObject($ours, $property, $theirs);
@@ -153,7 +170,7 @@ class ShouldOverwrite
 
         // general case - property exists, and we need to decide what should
         // be done about it
-        return !AreMergeable::intoMixed($ours->$property, $theirs);
+        return !AreMergeable::into($ours->$property, $theirs);
     }
 
     /**
@@ -175,8 +192,8 @@ class ShouldOverwrite
     public static function intoArray($ours, $key, $theirs)
     {
         // robustness!
-        if (!IsIndexable::checkMixed($ours)) {
-            throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
+        if (!IsIndexable::check($ours)) {
+            throw new E4xx_UnsupportedType(SimpleType::from($ours));
         }
 
         return self::checkArray($ours, $key, $theirs);
@@ -207,6 +224,6 @@ class ShouldOverwrite
 
         // general case - index exists, and we need to decide what should
         // be done about it
-        return !AreMergeable::intoMixed($ours[$key], $theirs);
+        return !AreMergeable::into($ours[$key], $theirs);
     }
 }
