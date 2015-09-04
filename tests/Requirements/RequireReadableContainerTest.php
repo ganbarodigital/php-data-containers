@@ -90,7 +90,7 @@ class RequireReadableContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      * @dataProvider provideReadableContainers
      */
     public function testCanCallStatically($item)
@@ -101,7 +101,7 @@ class RequireReadableContainerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireReadableContainer::checkMixed($item);
+        RequireReadableContainer::check($item);
     }
 
     /**
@@ -123,7 +123,7 @@ class RequireReadableContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::checkMixed
+     * @covers ::check
      * @dataProvider provideNonReadableContainers
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      */
@@ -135,7 +135,7 @@ class RequireReadableContainerTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        RequireReadableContainer::checkMixed($item);
+        RequireReadableContainer::check($item);
     }
 
     public function provideReadableContainers()

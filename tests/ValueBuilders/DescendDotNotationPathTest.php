@@ -113,7 +113,7 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::intoMixed
+     * @covers ::into
      * @dataProvider provideContainersAndPaths
      */
     public function testCanCallStatically($container, $path, $expectedResult)
@@ -124,7 +124,7 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = DescendDotNotationPath::intoMixed($container, $path);
+        $actualResult = DescendDotNotationPath::into($container, $path);
 
         // ----------------------------------------------------------------
         // test the results
@@ -133,7 +133,7 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::intoMixed
+     * @covers ::into
      * @dataProvider provideNonContainers
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      */
@@ -147,7 +147,7 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        DescendDotNotationPath::intoMixed($container, 'one.two');
+        DescendDotNotationPath::into($container, 'one.two');
     }
 
     /**
@@ -577,7 +577,7 @@ class DescendDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        DescendDotNotationPath::intoMixed($container, $path, []);
+        DescendDotNotationPath::into($container, $path, []);
 
     }
 

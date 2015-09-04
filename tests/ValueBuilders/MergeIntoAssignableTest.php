@@ -348,9 +348,9 @@ class MergeIntoAssignableTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromMixed
+     * @covers ::from
      */
-    public function testCanStaticallyCallFromMixed()
+    public function testCanStaticallyCall()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -363,8 +363,8 @@ class MergeIntoAssignableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoAssignable::fromMixed($ours1, $theirs1);
-        MergeIntoAssignable::fromMixed($ours2, $theirs2);
+        MergeIntoAssignable::from($ours1, $theirs1);
+        MergeIntoAssignable::from($ours2, $theirs2);
 
         // ----------------------------------------------------------------
         // test the results
@@ -374,11 +374,11 @@ class MergeIntoAssignableTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromMixed
+     * @covers ::from
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideUnsupportedTypes
      */
-    public function testFromMixedThrowsExceptionWhenUnsupportedTypeProvidedAsFirstArg($ours)
+    public function testStaticCallThrowsExceptionWhenUnsupportedTypeProvidedAsFirstArg($ours)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -388,15 +388,15 @@ class MergeIntoAssignableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoAssignable::fromMixed($ours, $theirs);
+        MergeIntoAssignable::from($ours, $theirs);
     }
 
     /**
-     * @covers ::fromMixed
+     * @covers ::from
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideUnsupportedTypes
      */
-    public function testFromMixedThrowsExceptionWhenUnsupportedTypeProvidedAsSecondArg($theirs)
+    public function testStaticCallThrowsExceptionWhenUnsupportedTypeProvidedAsSecondArg($theirs)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -406,7 +406,7 @@ class MergeIntoAssignableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoAssignable::fromMixed($data, $theirs);
+        MergeIntoAssignable::from($data, $theirs);
     }
 
     public function provideUnsupportedTypes()

@@ -350,9 +350,9 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromMixed
+     * @covers ::from
      */
-    public function testCanStaticallyCallFromMixed()
+    public function testCanStaticallyCallStatically()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -365,8 +365,8 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromMixed($ours1, $theirs1);
-        MergeIntoIndexable::fromMixed($ours2, $theirs2);
+        MergeIntoIndexable::from($ours1, $theirs1);
+        MergeIntoIndexable::from($ours2, $theirs2);
 
         // ----------------------------------------------------------------
         // test the results
@@ -376,11 +376,11 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::fromMixed
+     * @covers ::from
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideUnsupportedTypes
      */
-    public function testFromMixedThrowsExceptionWhenUnsupportedTypeProvidedAsFirstArg($ours)
+    public function testStaticCallThrowsExceptionWhenUnsupportedTypeProvidedAsFirstArg($ours)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -390,15 +390,15 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromMixed($ours, $theirs);
+        MergeIntoIndexable::from($ours, $theirs);
     }
 
     /**
-     * @covers ::fromMixed
+     * @covers ::from
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideUnsupportedTypes
      */
-    public function testFromMixedThrowsExceptionWhenUnsupportedTypeProvidedAsSecondArg($theirs)
+    public function testStaticCallThrowsExceptionWhenUnsupportedTypeProvidedAsSecondArg($theirs)
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -408,7 +408,7 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromMixed($data, $theirs);
+        MergeIntoIndexable::from($data, $theirs);
     }
 
     public function provideUnsupportedTypes()

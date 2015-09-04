@@ -102,6 +102,7 @@ class BuildDataBagTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::from
      * @covers ::fromArray
      * @dataProvider provideArraysToBuildFrom
      */
@@ -118,7 +119,7 @@ class BuildDataBagTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = BuildDataBag::fromArray($data);
+        $actualResult = BuildDataBag::from($data);
 
         // ----------------------------------------------------------------
         // test the results
@@ -175,6 +176,7 @@ class BuildDataBagTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ::from
      * @covers ::fromObject
      * @dataProvider provideObjectsToBuildFrom
      */
@@ -191,7 +193,7 @@ class BuildDataBagTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = BuildDataBag::fromObject($data);
+        $actualResult = BuildDataBag::from($data);
 
         // ----------------------------------------------------------------
         // test the results

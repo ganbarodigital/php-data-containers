@@ -74,7 +74,7 @@ class AreMergeableTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::intoMixed
+     * @covers ::into
      */
     public function testCanUseAsObject()
     {
@@ -98,7 +98,7 @@ class AreMergeableTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::intoMixed
+     * @covers ::into
      * @dataProvider provideNonTraversable
      */
     public function testTheirsMustBeTraversable($theirs)
@@ -111,7 +111,7 @@ class AreMergeableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = AreMergeable::intoMixed($ours, $theirs);
+        $actualResult = AreMergeable::into($ours, $theirs);
 
         // ----------------------------------------------------------------
         // test the results
@@ -134,7 +134,7 @@ class AreMergeableTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::intoMixed
+     * @covers ::into
      * @dataProvider provideNonIndexableNorAssignable
      */
     public function testOursMustBeIndexableOrAssignable($ours)
@@ -147,7 +147,7 @@ class AreMergeableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = AreMergeable::intoMixed($ours, $theirs);
+        $actualResult = AreMergeable::into($ours, $theirs);
 
         // ----------------------------------------------------------------
         // test the results

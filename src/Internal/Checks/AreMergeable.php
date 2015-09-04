@@ -87,6 +87,9 @@ class AreMergeable
      * does it make sense to attempt to merge the contents of $theirs into
      * $ours?
      *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
      * @param  mixed $ours
      *         where we want to merge to
      * @param  mixed $theirs

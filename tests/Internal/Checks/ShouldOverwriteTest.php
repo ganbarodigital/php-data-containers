@@ -75,7 +75,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::intoMixed
+     * @covers ::into
      */
     public function testCanUseAsObject()
     {
@@ -99,7 +99,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::intoMixed
+     * @covers ::into
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideNonIndexableNorAssignable
      */
@@ -113,7 +113,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        ShouldOverwrite::intoMixed($ours, 'noSuchProperty', $data2);
+        ShouldOverwrite::into($ours, 'noSuchProperty', $data2);
     }
 
     public function provideNonIndexableNorAssignable()
@@ -131,7 +131,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::intoMixed
+     * @covers ::into
      * @covers ::intoArray
      * @covers ::checkArray
      */
@@ -147,7 +147,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = ShouldOverwrite::intoMixed($ours, $property, $theirs);
+        $actualResult = ShouldOverwrite::into($ours, $property, $theirs);
 
         // ----------------------------------------------------------------
         // test the results
@@ -157,7 +157,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::intoMixed
+     * @covers ::into
      * @covers ::intoArray
      * @covers ::checkArray
      * @dataProvider provideNonMergeables
@@ -174,7 +174,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = ShouldOverwrite::intoMixed($ours, $property, []);
+        $actualResult = ShouldOverwrite::into($ours, $property, []);
 
         // ----------------------------------------------------------------
         // test the results
@@ -198,7 +198,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::intoMixed
+     * @covers ::into
      * @covers ::intoObject
      * @covers ::checkObject
      * @dataProvider provideNonMergeables
@@ -215,7 +215,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = ShouldOverwrite::intoMixed($ours, $property, []);
+        $actualResult = ShouldOverwrite::into($ours, $property, []);
 
         // ----------------------------------------------------------------
         // test the results
@@ -224,7 +224,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
     }
     /**
      * @covers ::__invoke
-     * @covers ::intoMixed
+     * @covers ::into
      * @covers ::intoArray
      * @covers ::intoObject
      * @covers ::checkObject
@@ -242,8 +242,8 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult1 = ShouldOverwrite::intoMixed($ours1, $property, $theirs);
-        $actualResult2 = ShouldOverwrite::intoMixed($ours2, $property, $theirs);
+        $actualResult1 = ShouldOverwrite::into($ours1, $property, $theirs);
+        $actualResult2 = ShouldOverwrite::into($ours2, $property, $theirs);
 
         // ----------------------------------------------------------------
         // test the results

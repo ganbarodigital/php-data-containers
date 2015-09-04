@@ -74,9 +74,9 @@ class IsDotNotationPath
      *         TRUE if the string is in dot.notation
      *         FALSE otherwise
      */
-    public function in($item)
+    public static function in($item)
     {
-        $methodName = FirstMethodMatchingType::from($item, get_class($this), 'in');
+        $methodName = FirstMethodMatchingType::from($item, self::class, 'in', E4xx_UnsupportedType::class);
         return self::$methodName($item);
     }
 
