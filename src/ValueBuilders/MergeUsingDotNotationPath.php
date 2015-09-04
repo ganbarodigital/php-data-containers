@@ -77,14 +77,14 @@ class MergeUsingDotNotationPath
     public static function intoArray(&$arr, $path, $value, $extendingItem = null)
     {
         // robustness!
-        RequireIndexable::checkMixed($arr, E4xx_UnsupportedType::class);
-        RequireDotNotationPath::checkMixed($path);
+        RequireIndexable::check($arr, E4xx_UnsupportedType::class);
+        RequireDotNotationPath::check($path);
 
         // find the point where we want to merge
         list ($firstPart, $finalPart) = self::splitPathInTwo($path);
         $leaf =& DescendDotNotationPath::intoArray($arr, $firstPart, $extendingItem);
         // merge it
-        MergeIntoProperty::ofMixed($leaf, $finalPart, $value);
+        MergeIntoProperty::of($leaf, $finalPart, $value);
     }
 
     /**
@@ -105,15 +105,15 @@ class MergeUsingDotNotationPath
     public static function intoObject($obj, $path, $value, $extendingItem = null)
     {
         // robustness!
-        RequireAssignable::checkMixed($obj, E4xx_UnsupportedType::class);
-        RequireDotNotationPath::checkMixed($path);
+        RequireAssignable::check($obj, E4xx_UnsupportedType::class);
+        RequireDotNotationPath::check($path);
 
         // find the point where we want to merge
         list ($firstPart, $finalPart) = self::splitPathInTwo($path);
         $leaf =& DescendDotNotationPath::intoObject($obj, $firstPart, $extendingItem);
 
         // merge it
-        MergeIntoProperty::ofMixed($leaf, $finalPart, $value);
+        MergeIntoProperty::of($leaf, $finalPart, $value);
     }
 
     /**
@@ -131,16 +131,39 @@ class MergeUsingDotNotationPath
      *         extend $ours?
      * @return void
      */
-    public static function intoMixed(&$ours, $path, $value, $extendingItem = null)
+    public static function into(&$ours, $path, $value, $extendingItem = null)
     {
-        if (IsAssignable::checkMixed($ours)) {
+        if (IsAssignable::check($ours)) {
             return self::intoObject($ours, $path, $value, $extendingItem);
         }
-        if (IsIndexable::checkMixed($ours)) {
+        if (IsIndexable::check($ours)) {
             return self::intoArray($ours, $path, $value, $extendingItem);
         }
 
-        throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
+        throw new E4xx_UnsupportedType(SimpleType::from($ours));
+    }
+
+    /**
+     * merge their data into our data, using dot.notation.support to
+     * find the point where the merge starts
+     *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
+     * @param  mixed $ours
+     *         the data that we want to merge into
+     * @param  string $path
+     *         the dot.notation.support path to where the merge should start
+     * @param  mixed $value
+     *         the data that we want to merge from
+     * @param  array|callable|string|null
+     *         if $path goes beyond what exists in $ours, how do we want to
+     *         extend $ours?
+     * @return void
+     */
+    public static function intoMixed(&$ours, $path, $value, $extendingItem = null)
+    {
+        return self::into($ours, $path, $value, $extendingItem);
     }
 
     /**
@@ -160,7 +183,7 @@ class MergeUsingDotNotationPath
      */
     public function __invoke(&$ours, $path, $value, $extendingItem = null)
     {
-        return self::intoMixed($ours, $path, $value, $extendingItem);
+        return self::into($ours, $path, $value, $extendingItem);
     }
 
     /**

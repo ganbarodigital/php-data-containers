@@ -61,10 +61,10 @@ class RequireDotNotationPath
      *         the class to use when throwing a not-dot-notation-path exception
      * @return void
      */
-    public static function checkMixed($path, $eUnsupportedType = E4xx_UnsupportedType::class, $eNotDotNotationPath = E4xx_NotDotNotationPath::class)
+    public static function check($path, $eUnsupportedType = E4xx_UnsupportedType::class, $eNotDotNotationPath = E4xx_NotDotNotationPath::class)
     {
         // make sure we have a string
-        RequireStringy::checkMixed($path, $eUnsupportedType);
+        RequireStringy::check($path, $eUnsupportedType);
 
         // make sure the string contains a dot.notation.support path
         if (!IsDotNotationPath::inString($path)) {
@@ -85,6 +85,26 @@ class RequireDotNotationPath
      */
     public function __invoke($path, $eUnsupportedType = E4xx_UnsupportedType::class, $eNotDotNotationPath = E4xx_NotDotNotationPath::class)
     {
-        self::checkMixed($path, $eUnsupportedType, $eNotDotNotationPath);
+        self::check($path, $eUnsupportedType, $eNotDotNotationPath);
     }
+
+    /**
+     * throws exceptions if $path is not a valid dot.notation.support path
+     *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
+     * @param  string $path
+     *         the path to check
+     * @param  string $eUnsupportedType
+     *         the class to use when throwing an unsupported-type exception
+     * @param  string $eNotDotNotationPath
+     *         the class to use when throwing a not-dot-notation-path exception
+     * @return void
+     */
+    public static function checkMixed($path, $eUnsupportedType = E4xx_UnsupportedType::class, $eNotDotNotationPath = E4xx_NotDotNotationPath::class)
+    {
+        self::check($path, $eUnsupportedType, $eNotDotNotationPath);
+    }
+
 }

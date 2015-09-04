@@ -62,7 +62,21 @@ class IsDotNotationPath
      */
     public function __invoke($item)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'in');
+        return self::in($item);
+    }
+
+    /**
+     * do we have a dot.notation string at all?
+     *
+     * @param  mixed $item
+     *         the item to examine
+     * @return boolean
+     *         TRUE if the string is in dot.notation
+     *         FALSE otherwise
+     */
+    public function in($item)
+    {
+        $methodName = FirstMethodMatchingType::from($item, get_class($this), 'in');
         return self::$methodName($item);
     }
 
@@ -78,7 +92,7 @@ class IsDotNotationPath
     public static function inString($item)
     {
         // robustness!!
-        RequireStringy::checkMixed($item, E4xx_UnsupportedType::class);
+        RequireStringy::check($item, E4xx_UnsupportedType::class);
 
         // make sure we have a dot somewhere we like
         if (!self::hasDotInAcceptablePlace($item)) {

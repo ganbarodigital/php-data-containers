@@ -74,7 +74,7 @@ class FilterDotNotationPath
     public static function fromArray($arr, $index)
     {
         // robustness!
-        RequireIndexable::checkMixed($arr, E4xx_UnsupportedType::class);
+        RequireIndexable::check($arr, E4xx_UnsupportedType::class);
 
         return DescendDotNotationPath::intoArray($arr, $index);
     }
@@ -92,7 +92,7 @@ class FilterDotNotationPath
     public static function fromObject($obj, $property)
     {
         // robustness!
-        RequireAssignable::checkMixed($obj, E4xx_UnsupportedType::class);
+        RequireAssignable::check($obj, E4xx_UnsupportedType::class);
 
         return DescendDotNotationPath::intoObject($obj, $property);
     }
@@ -107,16 +107,34 @@ class FilterDotNotationPath
      * @return mixed
      *         whatever we find when we walk the path
      */
-    public static function fromMixed($item, $path)
+    public static function from($item, $path)
     {
         // robustness!
-        RequireReadableContainer::checkMixed($item, E4xx_UnsupportedType::class);
+        RequireReadableContainer::check($item, E4xx_UnsupportedType::class);
 
-        if (IsAssignable::checkMixed($item)) {
+        if (IsAssignable::check($item)) {
             return self::fromObject($item, $path);
         }
 
         return self::fromArray($item, $path);
+    }
+
+    /**
+     * extract a value from a variable, using dot.notation.support
+     *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
+     * @param  object|array $item
+     *         the variable to extract from
+     * @param  string $property
+     *         the dot.notation.support path to walk
+     * @return mixed
+     *         whatever we find when we walk the path
+     */
+    public static function fromMixed($item, $property)
+    {
+        return self::from($item, $property);
     }
 
     /**
@@ -131,6 +149,6 @@ class FilterDotNotationPath
      */
     public function __invoke($item, $property)
     {
-        return self::fromMixed($item, $property);
+        return self::from($item, $property);
     }
 }

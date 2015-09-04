@@ -63,8 +63,7 @@ class IsReadableContainer
      */
     public function __invoke($item)
     {
-        $methodName = FirstMethodMatchingType::fromMixed($item, get_class($this), 'check');
-        return self::$methodName($item);
+        return self::check($item);
     }
 
     /**
@@ -76,12 +75,30 @@ class IsReadableContainer
      *         TRUE if the item is a data container
      *         FALSE otherwise
      */
-    public static function checkMixed($item)
+    public static function check($item)
     {
-        if (IsAssignable::checkMixed($item) || IsIndexable::checkMixed($item)) {
+        if (IsAssignable::check($item) || IsIndexable::check($item)) {
             return true;
         }
 
         return false;
     }
+
+    /**
+     * is the variable a data container that we can read from?
+     *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
+     * @param  mixed $item
+     *         the item to check
+     * @return boolean
+     *         TRUE if the item is a data container
+     *         FALSE otherwise
+     */
+    public static function checkMixed($item)
+    {
+        return self::check($item);
+    }
+
 }

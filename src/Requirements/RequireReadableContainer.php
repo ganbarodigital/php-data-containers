@@ -58,10 +58,10 @@ class RequireReadableContainer
      *         the class to use when throwing an unsupported-type exception
      * @return void
      */
-    public static function checkMixed($item, $eUnsupportedType = E4xx_UnsupportedType::class)
+    public static function check($item, $eUnsupportedType = E4xx_UnsupportedType::class)
     {
         // make sure we have a valid container
-        if (!IsReadableContainer::checkMixed($item)) {
+        if (!IsReadableContainer::check($item)) {
             throw new $eUnsupportedType($item);
         }
     }
@@ -77,6 +77,23 @@ class RequireReadableContainer
      */
     public function __invoke($item, $eUnsupportedType = E4xx_UnsupportedType::class)
     {
-        self::checkMixed($item, $eUnsupportedType);
+        self::check($item, $eUnsupportedType);
+    }
+
+    /**
+     * throws exceptions if $item is not a valid readable container
+     *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
+     * @param  mixed $item
+     *         the item to check
+     * @param  string $eUnsupportedType
+     *         the class to use when throwing an unsupported-type exception
+     * @return void
+     */
+    public static function checkMixed($item, $eUnsupportedType = E4xx_UnsupportedType::class)
+    {
+        self::check($item, $eUnsupportedType);
     }
 }

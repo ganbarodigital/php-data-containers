@@ -68,7 +68,7 @@ class MergeIntoProperty
     public static function ofArray(&$arr, $property, $value)
     {
         // robustness!
-        RequireIndexable::checkMixed($arr, E4xx_UnsupportedType::class);
+        RequireIndexable::check($arr, E4xx_UnsupportedType::class);
 
         // easiest case - no clash
         if (ShouldOverwrite::intoArray($arr, $property, $value)) {
@@ -78,12 +78,12 @@ class MergeIntoProperty
 
         // special case - we are merging into an object
         if (is_object($arr[$property])) {
-            MergeIntoAssignable::fromMixed($arr[$property], $value);
+            MergeIntoAssignable::from($arr[$property], $value);
             return;
         }
 
         // if we get here, then we must be merging into an array
-        MergeIntoIndexable::fromMixed($arr[$property], $value);
+        MergeIntoIndexable::from($arr[$property], $value);
     }
 
     /**
@@ -100,7 +100,7 @@ class MergeIntoProperty
     public static function ofObject($obj, $property, $value)
     {
         // robustness!
-        RequireAssignable::checkMixed($obj, E4xx_UnsupportedType::class);
+        RequireAssignable::check($obj, E4xx_UnsupportedType::class);
 
         // easiest case - no clash
         if (ShouldOverwrite::intoObject($obj, $property, $value)) {
@@ -110,12 +110,12 @@ class MergeIntoProperty
 
         // special case - we are merging into an object
         if (is_object($obj->$property)) {
-            MergeIntoAssignable::fromMixed($obj->$property, $value);
+            MergeIntoAssignable::from($obj->$property, $value);
             return;
         }
 
         // if we get here, then we must be merging into an array
-        MergeIntoIndexable::fromMixed($obj->$property, $value);
+        MergeIntoIndexable::from($obj->$property, $value);
     }
 
     /**
@@ -129,16 +129,35 @@ class MergeIntoProperty
      *         the data that we want to merge from
      * @return void
      */
-    public static function ofMixed(&$ours, $property, $value)
+    public static function of(&$ours, $property, $value)
     {
-        if (IsIndexable::checkMixed($ours)) {
+        if (IsIndexable::check($ours)) {
             return self::ofArray($ours, $property, $value);
         }
-        if (IsAssignable::checkMixed($ours)) {
+        if (IsAssignable::check($ours)) {
             return self::ofObject($ours, $property, $value);
         }
 
-        throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
+        throw new E4xx_UnsupportedType(SimpleType::from($ours));
+    }
+
+    /**
+     * merge their data into one of our data's properties
+     *
+     * @deprecated since 2.10.0
+     * @codeCoverageIgnore
+     *
+     * @param  mixed $ours
+     *         the data that we want to merge into
+     * @param  string $property
+     *         the property to merge into
+     * @param  mixed $value
+     *         the data that we want to merge from
+     * @return void
+     */
+    public static function ofMixed(&$ours, $property, $value)
+    {
+        return self::of($ours, $property, $value);
     }
 
     /**
@@ -154,6 +173,6 @@ class MergeIntoProperty
      */
     public function __invoke(&$ours, $property, $value)
     {
-        return self::ofMixed($ours, $property, $value);
+        return self::of($ours, $property, $value);
     }
 }

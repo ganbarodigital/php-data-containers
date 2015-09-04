@@ -70,8 +70,8 @@ class MergeIntoAssignable
     public static function fromArray($ours, $theirs)
     {
         // robustness!
-        RequireAssignable::checkMixed($ours, E4xx_UnsupportedType::class);
-        RequireTraversable::checkMixed($theirs, E4xx_UnsupportedType::class);
+        RequireAssignable::check($ours, E4xx_UnsupportedType::class);
+        RequireTraversable::check($theirs, E4xx_UnsupportedType::class);
 
         // copy from them to us
         foreach ($theirs as $key => $value) {
@@ -101,14 +101,14 @@ class MergeIntoAssignable
         }
 
         // special case - we are merging into an array
-        if (IsIndexable::checkMixed($ours->$key)) {
-            MergeIntoIndexable::fromMixed($ours->$key, $value);
+        if (IsIndexable::check($ours->$key)) {
+            MergeIntoIndexable::from($ours->$key, $value);
             return;
         }
 
         // at this point, we are merging into an object, using recursion
         // for which I am going to hell
-        MergeIntoAssignable::fromMixed($ours->$key, $value);
+        MergeIntoAssignable::from($ours->$key, $value);
     }
 
     /**
@@ -123,7 +123,7 @@ class MergeIntoAssignable
     public static function fromObject($ours, $theirs)
     {
         // robustness!
-        RequireAssignable::checkMixed($theirs, E4xx_UnsupportedType::class);
+        RequireAssignable::check($theirs, E4xx_UnsupportedType::class);
         self::fromArray($ours, get_object_vars($theirs));
     }
 
@@ -136,18 +136,35 @@ class MergeIntoAssignable
      *         the data that we want to merge from
      * @return void
      */
-    public static function fromMixed($ours, $theirs)
+    public static function from($ours, $theirs)
     {
-        if (IsAssignable::checkMixed($theirs)) {
+        if (IsAssignable::check($theirs)) {
             return self::fromObject($ours, $theirs);
         }
 
-        if (IsTraversable::checkMixed($theirs)) {
+        if (IsTraversable::check($theirs)) {
             return self::fromArray($ours, $theirs);
         }
 
         // cannot merge anything that reaches here!
-        throw new E4xx_UnsupportedType(SimpleType::fromMixed($ours));
+        throw new E4xx_UnsupportedType(SimpleType::from($ours));
+    }
+
+    /**
+     * merge their data into our object
+     *
+     * @deprecated since 2.2.0
+     * @codeCoverageIgnore
+     *
+     * @param  object $ours
+     *         the object that we want to merge into
+     * @param  array|object $theirs
+     *         the data that we want to merge from
+     * @return void
+     */
+    public static function fromMixed($ours, $theirs)
+    {
+        return self::from($ours, $theirs);
     }
 
     /**
@@ -161,6 +178,6 @@ class MergeIntoAssignable
      */
     public function __invoke($ours, $theirs)
     {
-        return self::fromMixed($ours, $theirs);
+        return self::from($ours, $theirs);
     }
 }

@@ -64,15 +64,15 @@ class AreMergeable
      *         true if merging makes sense
      *         false otherwise
      */
-    public static function intoMixed($ours, $theirs)
+    public static function into($ours, $theirs)
     {
         // if we can't traverse over theirs, no good
-        if (!IsTraversable::checkMixed($theirs)) {
+        if (!IsTraversable::check($theirs)) {
             return false;
         }
 
         // if we have arrays or databag-type objects, we're good
-        if (IsIndexable::checkMixed($ours) || IsAssignable::checkMixed($ours)) {
+        if (IsIndexable::check($ours) || IsAssignable::check($ours)) {
             return true;
         }
 
@@ -95,9 +95,26 @@ class AreMergeable
      *         true if merging makes sense
      *         false otherwise
      */
+    public static function intoMixed($ours, $theirs)
+    {
+        return self::into($ours, $theirs);
+    }
+
+    /**
+     * does it make sense to attempt to merge the contents of $theirs into
+     * $ours?
+     *
+     * @param  mixed $ours
+     *         where we want to merge to
+     * @param  mixed $theirs
+     *         where we want to merge from
+     * @return boolean
+     *         true if merging makes sense
+     *         false otherwise
+     */
     public function __invoke($ours, $theirs)
     {
-        return self::intoMixed($ours, $theirs);
+        return self::into($ours, $theirs);
     }
 
 }
