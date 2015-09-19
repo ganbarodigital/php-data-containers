@@ -45,12 +45,14 @@
 namespace GanbaroDigital\DataContainers\Checks;
 
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
-use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
-use GanbaroDigital\Reflection\Requirements\RequireStringy;
+use GanbaroDigital\Reflection\Checks\IsStringy;
+use GanbaroDigital\Reflection\ValueBuilders\LookupMethodByType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
 class IsDotNotationPath
 {
+    use LookupMethodByType;
+
     /**
      * do we have a dot.notation string at all?
      *
@@ -62,7 +64,7 @@ class IsDotNotationPath
      */
     public function __invoke($item)
     {
-        return self::in($item);
+        return self::check($item);
     }
 
     /**
@@ -74,10 +76,44 @@ class IsDotNotationPath
      *         TRUE if the string is in dot.notation
      *         FALSE otherwise
      */
+    public static function check($item)
+    {
+        $method = self::lookupMethodFor($item, self::$dispatchTable);
+        return self::$method($item);
+    }
+
+    /**
+     * do we have a dot.notation string at all?
+     *
+     * @deprecated since 2.3.0
+     * @codeCoverageIgnore
+     *
+     * @param  mixed $item
+     *         the item to examine
+     * @return boolean
+     *         TRUE if the string is in dot.notation
+     *         FALSE otherwise
+     */
     public static function in($item)
     {
-        $methodName = FirstMethodMatchingType::from($item, self::class, 'in', E4xx_UnsupportedType::class);
-        return self::$methodName($item);
+        return self::check($item);
+    }
+
+    /**
+     * do we have a dot.notation string at all?
+     *
+     * @deprecated since 2.3.0
+     * @codeCoverageIgnore
+     *
+     * @param  string $item
+     *         the item to examine
+     * @return boolean
+     *         TRUE if the string is in dot.notation
+     *         FALSE otherwise
+     */
+    public static function inString($item)
+    {
+        return self::checkString($item);
     }
 
     /**
@@ -89,18 +125,31 @@ class IsDotNotationPath
      *         TRUE if the string is in dot.notation
      *         FALSE otherwise
      */
-    public static function inString($item)
+    public static function checkString($item)
     {
         // robustness!!
-        RequireStringy::check($item, E4xx_UnsupportedType::class);
+        IsStringy::check($item) || E4xx_UnsupportedType::raise(SimpleType::from($item));
 
         // make sure we have a dot somewhere we like
-        if (!self::hasDotInAcceptablePlace($item)) {
+        if (!self::hasDotInAcceptablePlace((string)$item)) {
             return false;
         }
 
         // if we get here, we're happy
         return true;
+    }
+
+    /**
+     * called when there's no entry in our dispatch table that matches
+     * $item's data type
+     *
+     * @param  mixed $item
+     *         the item that we cannot process
+     * @return void
+     */
+    public static function nothingMatchesTheInputType($item)
+    {
+        throw new E4xx_UnsupportedType(SimpleType::from($item));
     }
 
     /**
@@ -130,4 +179,12 @@ class IsDotNotationPath
         // this is okay
         return true;
     }
+
+    /**
+     * our lookup table of which method to call for which supported data type
+     * @var array
+     */
+    private static $dispatchTable = [
+        'String' => 'checkString',
+    ];
 }
