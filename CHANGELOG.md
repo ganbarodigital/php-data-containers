@@ -2,6 +2,10 @@
 
 ## develop branch
 
+### New
+
+* Checks\HasUsingDotNotationPath - does the dot.notation.support path point at data in a container?
+
 ### Test Fixes
 
 * E4xx_UnsupportedType - latest Exceptions release means we no longer attempt to unwind the caller stack further
