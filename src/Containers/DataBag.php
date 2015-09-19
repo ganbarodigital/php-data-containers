@@ -48,6 +48,7 @@ use ArrayIterator;
 use IteratorAggregate;
 use stdClass;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty;
+use GanbaroDigital\DataContainers\Checks\HasUsingDotNotationPath;
 use GanbaroDigital\DataContainers\Checks\IsDotNotationPath;
 use GanbaroDigital\DataContainers\Filters\FilterDotNotationPath;
 use GanbaroDigital\DataContainers\ValueBuilders\MergeUsingDotNotationPath;
@@ -108,6 +109,30 @@ class DataBag extends stdClass implements IteratorAggregate
         //
         // I hope that it does not recurse!
         $this->$propertyName = $propertyValue;
+    }
+
+    /**
+     * magic method, called when we want to know if a fake property exists
+     * or not
+     *
+     * if $propertyName is a dot.notation.support path, we'll attempt to
+     * follow it to find the stated property
+     *
+     * @param  string $propertyName
+     *         name of the property to search for
+     * @return boolean
+     *         TRUE if the property exists (or is emulated)
+     *         FALSE otherwise
+     */
+    public function __isset($propertyName)
+    {
+        // is the user trying to use dot.notation?
+        if (IsDotNotationPath::inString($propertyName)) {
+            return HasUsingDotNotationPath::inObject($this, $propertyName);
+        }
+
+        // if we get here, the property does not exist
+        return false;
     }
 
     /**

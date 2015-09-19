@@ -5,6 +5,7 @@
 ### New
 
 * Checks\HasUsingDotNotationPath - does the dot.notation.support path point at data in a container?
+* Containers\DataBag - now supports isset() for dot.notation paths
 
 ### Fixes
 
