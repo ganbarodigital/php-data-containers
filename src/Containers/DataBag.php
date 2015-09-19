@@ -50,9 +50,9 @@ use stdClass;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty;
 use GanbaroDigital\DataContainers\Checks\HasUsingDotNotationPath;
 use GanbaroDigital\DataContainers\Checks\IsDotNotationPath;
+use GanbaroDigital\DataContainers\Editors\MergeUsingDotNotationPath;
 use GanbaroDigital\DataContainers\Editors\RemoveUsingDotNotationPath;
 use GanbaroDigital\DataContainers\Filters\FilterDotNotationPath;
-use GanbaroDigital\DataContainers\ValueBuilders\MergeUsingDotNotationPath;
 
 /**
  * The DataBag is based on the BaseObject that I built for Datasift's

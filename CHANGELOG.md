@@ -2,6 +2,15 @@
 
 ## develop branch
 
+### Deprecated
+
+We've added a new `Editors` namespace for tools which change the data that they're given to work on. In the past, these tools have ended up in the `ValueBuilders` namespace.
+
+* ValueBuilders\MergeIntoAssignable - use Editors\MergeIntoAssignable instead
+* ValueBuilders\MergeIntoIndexable - use Editors\MergeIntoIndexable instead
+* ValueBuilders\MergeIntoProperty - use Editors\MergeIntoProperty instead
+* ValueBuilders\MergeUsingDotNotationPath - use Editors\MergeIntoDotNotationPath instead
+
 ### New
 
 * Checks\HasUsingDotNotationPath - does the dot.notation.support path point at data in a container?
