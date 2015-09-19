@@ -49,11 +49,6 @@ class E4xx_UnsupportedType extends E4xx_DataContainerException
 {
     use UnsupportedType;
 
-    public static function raise($type)
-    {
-        throw new self($type);
-    }
-
     /**
      * exception thrown when a method's input parameter has a type that cannot
      * be processed

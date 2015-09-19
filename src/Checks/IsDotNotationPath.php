@@ -45,7 +45,7 @@
 namespace GanbaroDigital\DataContainers\Checks;
 
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
-use GanbaroDigital\Reflection\Checks\IsStringy;
+use GanbaroDigital\Reflection\Requirements\RequireStringy;
 use GanbaroDigital\Reflection\ValueBuilders\LookupMethodByType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
@@ -128,7 +128,7 @@ class IsDotNotationPath
     public static function checkString($item)
     {
         // robustness!!
-        IsStringy::check($item) || E4xx_UnsupportedType::raise(SimpleType::from($item));
+        RequireStringy::check($item, E4xx_UnsupportedType::class);
 
         // make sure we have a dot somewhere we like
         if (!self::hasDotInAcceptablePlace((string)$item)) {
