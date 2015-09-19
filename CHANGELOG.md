@@ -2,7 +2,9 @@
 
 ## develop branch
 
-Nothing yet.
+### Test Fixes
+
+* E4xx_UnsupportedType - latest Exceptions release means we no longer attempt to unwind the caller stack further
 
 ## v2.2.0 - Fri Sep 4 2015
 
