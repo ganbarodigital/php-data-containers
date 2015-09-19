@@ -6,6 +6,7 @@
 
 * Checks\HasUsingDotNotationPath - does the dot.notation.support path point at data in a container?
 * Containers\DataBag - now supports isset() for dot.notation paths
+* Containers\DataBag - now supports unset() for dot.notation paths
 * Editors\RemoveProperty - added - remove a property from an array or index
 * Editors\RemoveUsingDotNotationPath - added - remove a property from a container using dot.notation.support
 

@@ -50,6 +50,7 @@ use stdClass;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty;
 use GanbaroDigital\DataContainers\Checks\HasUsingDotNotationPath;
 use GanbaroDigital\DataContainers\Checks\IsDotNotationPath;
+use GanbaroDigital\DataContainers\Editors\RemoveUsingDotNotationPath;
 use GanbaroDigital\DataContainers\Filters\FilterDotNotationPath;
 use GanbaroDigital\DataContainers\ValueBuilders\MergeUsingDotNotationPath;
 
@@ -133,6 +134,17 @@ class DataBag extends stdClass implements IteratorAggregate
 
         // if we get here, the property does not exist
         return false;
+    }
+
+    /**
+     * magic method, called when we want to delete a fake property
+     *
+     * @param string $propertyName
+     *        the property to remove
+     */
+    public function __unset($propertyName)
+    {
+        RemoveUsingDotNotationPath::from($this, $propertyName);
     }
 
     /**
