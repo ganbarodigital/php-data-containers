@@ -2,6 +2,10 @@
 
 ## develop branch
 
+Nothing yet.
+
+## 2.3.0 - Sun Sep 20 2015
+
 ### Deprecated
 
 We've added a new `Editors` namespace for tools which change the data that they're given to work on. In the past, these tools have ended up in the `ValueBuilders` namespace.
