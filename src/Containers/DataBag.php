@@ -78,7 +78,7 @@ class DataBag extends stdClass implements IteratorAggregate
     public function __get($propertyName)
     {
         // is the user trying to use dot.notation?
-        if (IsDotNotationPath::inString($propertyName)) {
+        if (IsDotNotationPath::checkString($propertyName)) {
             return FilterDotNotationPath::fromObject($this, $propertyName);
         }
 
@@ -102,7 +102,7 @@ class DataBag extends stdClass implements IteratorAggregate
     public function __set($propertyName, $propertyValue)
     {
         // is the user trying to use dot.notation?
-        if (IsDotNotationPath::inString($propertyName)) {
+        if (IsDotNotationPath::checkString($propertyName)) {
             return MergeUsingDotNotationPath::intoObject($this, $propertyName, $propertyValue, DataBag::class);
         }
 
@@ -128,7 +128,7 @@ class DataBag extends stdClass implements IteratorAggregate
     public function __isset($propertyName)
     {
         // is the user trying to use dot.notation?
-        if (IsDotNotationPath::inString($propertyName)) {
+        if (IsDotNotationPath::checkString($propertyName)) {
             return HasUsingDotNotationPath::inObject($this, $propertyName);
         }
 

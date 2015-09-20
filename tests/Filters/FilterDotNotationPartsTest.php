@@ -209,9 +209,7 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
             [ true ],
             [ [ ] ],
             [ 3.1415927 ],
-            [ 3.0 ],
             [ new \stdClass ],
-            [ "0" ],
         ];
     }
 }

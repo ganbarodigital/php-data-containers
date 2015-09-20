@@ -100,6 +100,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::into
+     * @covers ::nothingMatchesTheInputType
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideNonIndexableNorAssignable
      */

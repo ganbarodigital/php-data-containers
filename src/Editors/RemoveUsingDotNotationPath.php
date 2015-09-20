@@ -59,7 +59,7 @@ class RemoveUsingDotNotationPath
      * remove data from a container, using dot.notation.support to identify
      * the data to remove
      *
-     * @param  mixed $ours
+     * @param  mixed $container
      *         the container we want to remove data from
      * @param  string $path
      *         the dot.notation.support path to the data to remove

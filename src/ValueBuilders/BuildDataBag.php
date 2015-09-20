@@ -47,10 +47,13 @@ namespace GanbaroDigital\DataContainers\ValueBuilders;
 use GanbaroDigital\DataContainers\Containers\DataBag;
 use GanbaroDigital\DataContainers\ValueBuilders\MergeDataBag;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
-use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
+use GanbaroDigital\Reflection\ValueBuilders\LookupMethodByType;
+use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
 class BuildDataBag
 {
+    use LookupMethodByType;
+
     /**
      * create a DataBag from an array of data
      *
@@ -88,7 +91,7 @@ class BuildDataBag
      */
     public static function from($item)
     {
-        $methodName = FirstMethodMatchingType::from($item, self::class, 'from');
+        $methodName = self::lookupMethodFor($item, self::$dispatchTable);
         return self::$methodName($item);
     }
 
@@ -101,6 +104,27 @@ class BuildDataBag
      */
     public function __invoke($item)
     {
-        return self::from($item);
+        $methodName = self::lookupMethodFor($item, self::$dispatchTable);
+        return self::$methodName($item);
     }
+
+    /**
+     * called when we have a data type we cannot support
+     *
+     * @param  mixed $item
+     * @return void
+     */
+    private static function nothingMatchesTheInputType($item)
+    {
+        throw new E4xx_UnsupportedType(SimpleType::from($item));
+    }
+
+    /**
+     * our list of which method to call for which input data type
+     * @var array
+     */
+    private static $dispatchTable = [
+        'Array' => 'fromArray',
+        'Object' => 'fromObject',
+    ];
 }

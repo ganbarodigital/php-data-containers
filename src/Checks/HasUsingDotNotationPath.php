@@ -51,6 +51,7 @@ use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\DataContainers\Requirements\RequireDotNotationPath;
 use GanbaroDigital\DataContainers\Requirements\RequireReadableContainer;
 use GanbaroDigital\DataContainers\ValueBuilders\DescendDotNotationPath;
+use GanbaroDigital\Defensive\Requirements\RequireAnyOneOf;
 use GanbaroDigital\Reflection\ValueBuilders\LookupMethodByType;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
 use GanbaroDigital\Reflection\Checks\IsIndexable;
@@ -113,10 +114,10 @@ class HasUsingDotNotationPath
     {
         // defensive programming!
         RequireIndexable::check($container, E4xx_UnsupportedType::class);
-        IsDotNotationPath::in($path) || IsStringy::check($path) || E4xx_NotDotNotationPath::raise($path);
+        RequireAnyOneOf::check([new IsDotNotationPath, new IsStringy], [$path], E4xx_NotDotNotationPath::class);
 
         try {
-            $value = DescendDotNotationPath::intoArray($container, $path);
+            DescendDotNotationPath::intoArray($container, $path);
             return true;
         }
         catch (E4xx_NoSuchIndex $e) {
@@ -142,10 +143,10 @@ class HasUsingDotNotationPath
     {
         // defensive programming!
         RequireAssignable::check($container, E4xx_UnsupportedType::class);
-        IsDotNotationPath::in($path) || IsStringy::check($path) || E4xx_NotDotNotationPath::raise($path);
+        RequireAnyOneOf::check([new IsDotNotationPath, new IsStringy], [$path], E4xx_NotDotNotationPath::class);
 
         try {
-            $value = DescendDotNotationPath::intoObject($container, $path);
+            DescendDotNotationPath::intoObject($container, $path);
             return true;
         }
         catch (E4xx_NoSuchIndex $e) {

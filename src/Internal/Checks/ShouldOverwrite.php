@@ -47,11 +47,13 @@ namespace GanbaroDigital\DataContainers\Internal\Checks;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\Checks\IsAssignable;
 use GanbaroDigital\Reflection\Checks\IsIndexable;
-use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
+use GanbaroDigital\Reflection\ValueBuilders\LookupMethodByType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
 class ShouldOverwrite
 {
+    use LookupMethodByType;
+
     /**
      * should we overwrite $ours's $property with the value of $theirs?
      *
@@ -91,32 +93,19 @@ class ShouldOverwrite
      */
     public static function into($ours, $property, $theirs)
     {
-        $methodName = FirstMethodMatchingType::from($ours, self::class, 'into', E4xx_UnsupportedType::class);
+        $methodName = self::lookupMethodFor($ours, self::$dispatchTable);
         return self::$methodName($ours, $property, $theirs);
     }
 
     /**
-     * should we overwrite $ours's $property with the value of $theirs?
-     *
-     * @deprecated since 2.2.0
-     * @codeCoverageIgnore
+     * called when there's no entry in our dispatch table for a data type
      *
      * @param  mixed $ours
-     *         the variable where $property may exist
-     * @param  string $property
-     *         the property on $ours whose fate we are deciding
-     * @param  mixed $theirs
-     *         the data we want to assign to the property
-     * @return boolean
-     *         TRUE if we should overwrite the property's existing value
-     *         with $value
-     *         TRUE if $property currently has no value
-     *         FALSE if we should merge $value into the property's exist
-     *         value
+     * @return void
      */
-    public static function intoMixed($ours, $property, $theirs)
+    private static function nothingMatchesTheInputType($ours)
     {
-        return self::into($ours, $property, $theirs);
+        throw new E4xx_UnsupportedType(SimpleType::from($ours));
     }
 
     /**
@@ -226,4 +215,13 @@ class ShouldOverwrite
         // be done about it
         return !AreMergeable::into($ours[$key], $theirs);
     }
+
+    /**
+     * lookup table of which method to call for which data type
+     * @var array
+     */
+    private static $dispatchTable = [
+        'Array' => 'intoArray',
+        'Object' => 'intoObject',
+    ];
 }
