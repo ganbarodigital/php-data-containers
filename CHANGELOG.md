@@ -4,6 +4,33 @@
 
 Nothing yet.
 
+## 2.3.0 - Sun Sep 20 2015
+
+### Deprecated
+
+We've added a new `Editors` namespace for tools which change the data that they're given to work on. In the past, these tools have ended up in the `ValueBuilders` namespace.
+
+* ValueBuilders\MergeIntoAssignable - use Editors\MergeIntoAssignable instead
+* ValueBuilders\MergeIntoIndexable - use Editors\MergeIntoIndexable instead
+* ValueBuilders\MergeIntoProperty - use Editors\MergeIntoProperty instead
+* ValueBuilders\MergeUsingDotNotationPath - use Editors\MergeIntoDotNotationPath instead
+
+### New
+
+* Checks\HasUsingDotNotationPath - does the dot.notation.support path point at data in a container?
+* Containers\DataBag - now supports isset() for dot.notation paths
+* Containers\DataBag - now supports unset() for dot.notation paths
+* Editors\RemoveProperty - added - remove a property from an array or index
+* Editors\RemoveUsingDotNotationPath - added - remove a property from a container using dot.notation.support
+
+### Fixes
+
+* Checks\IsDotNotationType - updated to use latest Reflection for performance
+
+### Test Fixes
+
+* E4xx_UnsupportedType - latest Exceptions release means we no longer attempt to unwind the caller stack further
+
 ## v2.2.0 - Fri Sep 4 2015
 
 ### New

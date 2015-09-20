@@ -34,20 +34,20 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/ValueBuilders
+ * @package   DataContainers/Editors
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\ValueBuilders;
+namespace GanbaroDigital\DataContainers\Editors;
 
 use PHPUnit_Framework_TestCase;
 use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\ValueBuilders\MergeIntoProperty
+ * @coversDefaultClass GanbaroDigital\DataContainers\Editors\MergeIntoProperty
  */
 class MergeIntoPropertyTest extends PHPUnit_Framework_TestCase
 {

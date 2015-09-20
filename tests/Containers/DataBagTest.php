@@ -93,6 +93,51 @@ class DataBagTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @coversNothing
+     */
+    public function testCanCheckIfPropertyIsSet()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new DataBag;
+        $this->assertFalse(isset($obj->test1));
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $obj->test1 = 1;
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue(isset($obj->test1));
+    }
+
+    /**
+     * @coversNothing
+     */
+    public function testCanUnsetProperty()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new DataBag;
+        $obj->test1 = 1;
+        $this->assertTrue(isset($obj->test1));
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        unset($obj->test1);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertFalse(isset($obj->test1));
+    }
+
+    /**
      * @covers ::__get
      */
     public function testCanUseDotNotationToGetProperties()
@@ -141,6 +186,56 @@ class DataBagTest extends PHPUnit_Framework_TestCase
         // test the results
 
         $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
+     * @covers ::__isset
+     */
+    public function testCanCheckIfPropertyIsSetUsingDotNotationSupport()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new DataBag;
+        $this->assertFalse(isset($obj->{'child1.child2'}));
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $obj->child1 = new DataBag;
+        $obj->child1->child2 = 100;
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue(isset($obj->{'child1.child2'}));
+    }
+
+    /**
+     * @covers ::__unset
+     */
+    public function testCanUnsetPropertyUsingDotNotationSupport()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new DataBag;
+        $obj->child1 = new DataBag;
+        $obj->child1->child2 = 100;
+
+        $this->assertTrue(isset($obj->child1->child2));
+        $this->assertTrue(isset($obj->{'child1.child2'}));
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        unset($obj->{'child1.child2'});
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertTrue(isset($obj->child1));
+        $this->assertFalse(isset($obj->child1->child2));
     }
 
     /**
@@ -236,5 +331,4 @@ class DataBagTest extends PHPUnit_Framework_TestCase
         $this->assertNotSame($obj->child1, $cloned->child1);
         $this->assertNotSame($obj->child1->child2, $cloned->child1->child2);
     }
-
 }

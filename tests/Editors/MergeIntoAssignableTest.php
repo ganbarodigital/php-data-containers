@@ -34,116 +34,41 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/ValueBuilders
+ * @package   DataContainers/Editors
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\ValueBuilders;
+namespace GanbaroDigital\DataContainers\Editors;
 
 use PHPUnit_Framework_TestCase;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\ValueBuilders\MergeIntoIndexable
+ * @coversDefaultClass GanbaroDigital\DataContainers\Editors\MergeIntoAssignable
  */
-class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
+class MergeIntoAssignableTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers ::fromArray
-     * @covers ::mergeKeyIntoArray
-     */
-    public function testCanMergeSimpleArrays()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $ours = [ 'one' => 1, 'two' => 2];
-        $theirs = [ 'three' => 3, 'four' => 4];
-
-        $expectedResult = [ 'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        MergeIntoIndexable::fromArray($ours, $theirs);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedResult, $ours);
-    }
-
-    /**
-     * @covers ::fromArray
-     * @covers ::mergeKeyIntoArray
-     */
-    public function testCanMergeNestedArrays()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $ours = [ 'one' => 1, 'two' => 2];
-        $theirs = [ 'three' => 3, 'four' => 4, 'five' => [ 1,2,3]];
-
-        $expectedResult = [ 'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => [1,2,3]];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        MergeIntoIndexable::fromArray($ours, $theirs);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedResult, $ours);
-    }
-
-    /**
-     * @covers ::fromArray
-     * @covers ::mergeKeyIntoArray
-     */
-    public function testCanMergeIntoSimpleArrays()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $ours = [ 'one' => 1, 'two' => 2, 'three' => ['three' => 3]];
-        $theirs = [ 'three' => ['three' => 3, 'four' => 4]];
-
-        $expectedResult = [ 'one' => 1, 'two' => 2, 'three' => ['three' => 3, 'four' => 4]];
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        MergeIntoIndexable::fromArray($ours, $theirs);
-
-        // ----------------------------------------------------------------
-        // test the results
-
-        $this->assertEquals($expectedResult, $ours);
-    }
-
-    /**
      * @covers ::fromObject
      * @covers ::fromArray
-     * @covers ::mergeKeyIntoArray
+     * @covers ::mergeKeyIntoAssignable
      */
-    public function testCanMergeSimpleObject()
+    public function testCanMergeSimpleObjects()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $ours = [ 'one' => 1, 'two' => 2];
+        $ours = (object)[ 'one' => 1, 'two' => 2];
         $theirs = (object)[ 'three' => 3, 'four' => 4];
 
-        $expectedResult = [ 'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4];
+        $expectedResult = (object)[ 'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromObject($ours, $theirs);
+        MergeIntoAssignable::fromObject($ours, $theirs);
 
         // ----------------------------------------------------------------
         // test the results
@@ -154,22 +79,74 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
     /**
      * @covers ::fromObject
      * @covers ::fromArray
-     * @covers ::mergeKeyIntoArray
+     * @covers ::mergeKeyIntoAssignable
      */
     public function testCanMergeNestedObjects()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $ours = [ 'one' => 1, 'two' => 2];
+        $ours = (object)[ 'one' => 1, 'two' => 2];
         $theirs = (object)[ 'three' => 3, 'four' => 4, 'five' => (object)[ 1,2,3]];
 
-        $expectedResult = [ 'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => (object)[1,2,3]];
+        $expectedResult = (object)[ 'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => (object)[1,2,3]];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromObject($ours, $theirs);
+        MergeIntoAssignable::fromObject($ours, $theirs);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedResult, $ours);
+        $this->assertSame($theirs->five, $ours->five);
+    }
+
+    /**
+     * @covers ::fromObject
+     * @covers ::fromArray
+     * @covers ::mergeKeyIntoAssignable
+     */
+    public function testCanMergeIntoSimpleObjects()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $ours = (object)[ 'one' => 1, 'two' => 2, 'three' => (object)['three' => 3]];
+        $theirs = (object)[ 'three' => (object)['three' => 3, 'four' => 4]];
+
+        $expectedResult = (object)[ 'one' => 1, 'two' => 2, 'three' => (object) ['three' => 3, 'four' => 4]];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        MergeIntoAssignable::fromObject($ours, $theirs);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedResult, $ours);
+    }
+
+    /**
+     * @covers ::fromArray
+     * @covers ::mergeKeyIntoAssignable
+     */
+    public function testCanMergeSimpleArray()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $ours = (object)[ 'one' => 1, 'two' => 2];
+        $theirs = [ 'three' => 3, 'four' => 4];
+
+        $expectedResult = (object)[ 'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        MergeIntoAssignable::fromArray($ours, $theirs);
 
         // ----------------------------------------------------------------
         // test the results
@@ -179,22 +156,48 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::fromObject
-     * @covers ::mergeKeyIntoArray
+     * @covers ::fromArray
+     * @covers ::mergeKeyIntoAssignable
      */
-    public function testCanMergeIntoSimpleObjects()
+    public function testCanMergeNestedArrays()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $ours = [ 'one' => 1, 'two' => 2, 'three' => (object)['three' => 3]];
-        $theirs = (object)[ 'three' => ['three' => 3, 'four' => 4]];
+        $ours = (object)[ 'one' => 1, 'two' => 2];
+        $theirs = [ 'three' => 3, 'four' => 4, 'five' => (object)[ 1,2,3]];
 
-        $expectedResult = [ 'one' => 1, 'two' => 2, 'three' => (object)['three' => 3, 'four' => 4]];
+        $expectedResult = (object)[ 'one' => 1, 'two' => 2, 'three' => 3, 'four' => 4, 'five' => (object)[1,2,3]];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromObject($ours, $theirs);
+        MergeIntoAssignable::fromArray($ours, $theirs);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedResult, $ours);
+    }
+
+    /**
+     * @covers ::fromArray
+     * @covers ::mergeKeyIntoAssignable
+     */
+    public function testCanMergeIntoSimpleArrays()
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $ours = (object)[ 'one' => 1, 'two' => 2, 'three' => ['three' => 3]];
+        $theirs = [ 'three' => ['three' => 3, 'four' => 4]];
+
+        $expectedResult = (object)[ 'one' => 1, 'two' => 2, 'three' => ['three' => 3, 'four' => 4]];
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        MergeIntoAssignable::fromArray($ours, $theirs);
 
         // ----------------------------------------------------------------
         // test the results
@@ -217,7 +220,7 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromArray($ours, $theirs);
+        MergeIntoAssignable::fromObject($ours, $theirs);
 
         // ----------------------------------------------------------------
         // test the results
@@ -229,19 +232,19 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
     {
         return [
             [
-                [
+                (object) [
                     'one' => 1,
                     'two' => false,
                     'three' => 3.1415927,
                     'four' => 'hello, world',
                 ],
-                [
+                (object) [
                     'one' => true,
                     'two' => 'two',
                     'three' => 3,
                     'four' => 4.567,
                 ],
-                [
+                (object) [
                     'one' => true,
                     'two' => 'two',
                     'three' => 3,
@@ -255,24 +258,7 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
      * @covers ::fromArray
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      */
-    public function testThrowsExceptionIfNonAssignablePassedIntoFromArray()
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $data = false;
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        MergeIntoIndexable::fromArray($data, []);
-    }
-
-    /**
-     * @covers ::fromArray
-     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
-     */
-    public function testThrowsExceptionIfNonTraversablePassedIntoFromArray()
+    public function testThrowsExceptionIfNonAssignablePassedIntoOfArray()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -282,14 +268,26 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromArray($data, false);
+        MergeIntoAssignable::fromArray($data, []);
+    }
+
+    /**
+     * @covers ::fromArray
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     */
+    public function testThrowsExceptionIfNonTraversablePassedIntoOfArray()
+    {
+        // ----------------------------------------------------------------
+        // perform the change
+
+        MergeIntoAssignable::fromArray((object)[], false);
     }
 
     /**
      * @covers ::fromObject
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      */
-    public function testThrowsExceptionIfNonObjectPassedIntoFromObject()
+    public function testThrowsExceptionIfNonObjectPassedIntoOfObject()
     {
         // ----------------------------------------------------------------
         // setup your test
@@ -299,7 +297,7 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::fromObject($data, false);
+        MergeIntoAssignable::fromObject($data, []);
     }
 
     /**
@@ -313,12 +311,12 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $obj = new MergeIntoIndexable();
+        $obj = new MergeIntoAssignable();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof MergeIntoIndexable);
+        $this->assertTrue($obj instanceof MergeIntoAssignable);
     }
 
     /**
@@ -329,12 +327,12 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $ours1 = [];
-        $ours2 = [];
+        $ours1 = (object)[];
+        $ours2 = (object)[];
         $theirs1 = ["one" => 1];
         $theirs2 = (object)["two" => 2];
 
-        $obj = new MergeIntoIndexable();
+        $obj = new MergeIntoAssignable();
 
         // ----------------------------------------------------------------
         // perform the change
@@ -345,34 +343,34 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($ours1, $theirs1);
-        $this->assertEquals($ours2, (array)$theirs2);
+        $this->assertEquals($ours1, (object)$theirs1);
+        $this->assertEquals($ours2, $theirs2);
     }
 
     /**
      * @covers ::from
      */
-    public function testCanStaticallyCallStatically()
+    public function testCanStaticallyCall()
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $ours1 = [];
-        $ours2 = [];
+        $ours1 = (object)[];
+        $ours2 = (object)[];
         $theirs1 = ["one" => 1];
         $theirs2 = (object)["two" => 2];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::from($ours1, $theirs1);
-        MergeIntoIndexable::from($ours2, $theirs2);
+        MergeIntoAssignable::from($ours1, $theirs1);
+        MergeIntoAssignable::from($ours2, $theirs2);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($ours1, $theirs1);
-        $this->assertEquals($ours2, (array)$theirs2);
+        $this->assertEquals($ours1, (object)$theirs1);
+        $this->assertEquals($ours2, $theirs2);
     }
 
     /**
@@ -390,7 +388,7 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::from($ours, $theirs);
+        MergeIntoAssignable::from($ours, $theirs);
     }
 
     /**
@@ -403,12 +401,12 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-        $data = [];
+        $data = (object)[];
 
         // ----------------------------------------------------------------
         // perform the change
 
-        MergeIntoIndexable::from($data, $theirs);
+        MergeIntoAssignable::from($data, $theirs);
     }
 
     public function provideUnsupportedTypes()

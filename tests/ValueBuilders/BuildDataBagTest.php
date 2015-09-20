@@ -248,4 +248,58 @@ class BuildDataBagTest extends PHPUnit_Framework_TestCase
             ]
         ];
     }
+
+    /**
+     * @covers ::__invoke
+     * @covers ::nothingMatchesTheInputType
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     *
+     * @dataProvider provideEverythignElseToBuildFrom
+     */
+    public function testRejectsEverythingElseWhenUsedAsObject($item)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        $obj = new BuildDataBag;
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        $obj($item);
+    }
+
+    /**
+     * @covers ::from
+     * @covers ::nothingMatchesTheInputType
+     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
+     *
+     * @dataProvider provideEverythignElseToBuildFrom
+     */
+    public function testRejectsEverythingElseWhenCalledStatically($item)
+    {
+        // ----------------------------------------------------------------
+        // setup your test
+
+        // ----------------------------------------------------------------
+        // perform the change
+
+        BuildDataBag::from($item);
+    }
+
+    public function provideEverythignElseToBuildFrom()
+    {
+        return [
+            [ null ],
+            [ true ],
+            [ false ],
+            [ function(){} ],
+            [ 3.1415927 ],
+            [ 0 ],
+            [ 100 ],
+            [ STDIN ],
+            [ "hello, world!" ],
+        ];
+    }
+
 }

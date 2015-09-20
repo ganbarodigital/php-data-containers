@@ -74,7 +74,7 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::__invoke
-     * @covers ::in
+     * @covers ::check
      */
     public function testCanUseAsObject()
     {
@@ -95,8 +95,7 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::in
-     * @covers ::inString
+     * @covers ::checkString
      */
     public function testCanCallStatically()
     {
@@ -106,7 +105,7 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = IsDotNotationPath::in('dot.notation.support');
+        $actualResult = IsDotNotationPath::check('dot.notation.support');
 
         // ----------------------------------------------------------------
         // test the results
@@ -115,8 +114,7 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::in
-     * @covers ::inString
+     * @covers ::checkString
      * @covers ::hasDotInAcceptablePlace
      */
     public function testChecksForDotNotation()
@@ -127,8 +125,8 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $IsDotNotationPath = IsDotNotationPath::in('dot.notation.support');
-        $isNotDotNotation = IsDotNotationPath::in('dotNotationSupport');
+        $IsDotNotationPath = IsDotNotationPath::check('dot.notation.support');
+        $isNotDotNotation = IsDotNotationPath::check('dotNotationSupport');
 
         // ----------------------------------------------------------------
         // test the results
@@ -138,8 +136,7 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::in
-     * @covers ::inString
+     * @covers ::checkString
      * @covers ::hasDotInAcceptablePlace
      */
     public function testRejectsWhenOnlyDotIsAtEndOfString()
@@ -150,7 +147,7 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $isNotDotNotation = IsDotNotationPath::in('dotNotationSupport.');
+        $isNotDotNotation = IsDotNotationPath::check('dotNotationSupport.');
 
         // ----------------------------------------------------------------
         // test the results
@@ -159,8 +156,8 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ::in
-     * @covers ::inString
+     * @covers ::checkString
+     * @covers ::nothingMatchesTheInputType
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideNonStrings
      */
@@ -172,7 +169,7 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        IsDotNotationPath::in($path);
+        IsDotNotationPath::check($path);
     }
 
     public function provideNonStrings()

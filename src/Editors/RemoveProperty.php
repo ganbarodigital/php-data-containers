@@ -34,7 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/ValueBuilders
+ * @package   DataContainers/Editors
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2011-present Mediasift Ltd www.datasift.com
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
@@ -42,89 +42,96 @@
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\ValueBuilders;
+namespace GanbaroDigital\DataContainers\Editors;
 
-use GanbaroDigital\DataContainers\Containers\DataBag;
-use GanbaroDigital\DataContainers\ValueBuilders\MergeDataBag;
+use ArrayObject;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\Reflection\Checks\IsAssignable;
+use GanbaroDigital\Reflection\Checks\IsIndexable;
+use GanbaroDigital\Reflection\Requirements\RequireAssignable;
+use GanbaroDigital\Reflection\Requirements\RequireIndexable;
 use GanbaroDigital\Reflection\ValueBuilders\LookupMethodByType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
-class BuildDataBag
+class RemoveProperty
 {
     use LookupMethodByType;
 
     /**
-     * create a DataBag from an array of data
+     * remove data from a container
      *
-     * @param  array $item
-     *         the array to build from
-     * @return DataBag
-     */
-    public static function fromArray($item)
-    {
-        $retval = new DataBag;
-        MergeIntoAssignable::fromArray($retval, $item);
-        return $retval;
-    }
-
-    /**
-     * create a DataBag from an object containing data
-     *
-     * @param  object $item
-     *         the object to build from
-     * @return DataBag
-     */
-    public static function fromObject($item)
-    {
-        $retval = new DataBag;
-        MergeIntoAssignable::fromObject($retval, $item);
-        return $retval;
-    }
-
-    /**
-     * create a DataBag from another container
-     *
-     * @param  array|object $item
-     *         the container to extract from
-     * @return DataBag
-     */
-    public static function from($item)
-    {
-        $methodName = self::lookupMethodFor($item, self::$dispatchTable);
-        return self::$methodName($item);
-    }
-
-    /**
-     * create a DataBag from another container
-     *
-     * @param  array|object $item
-     *         the container to extract from
-     * @return DataBag
-     */
-    public function __invoke($item)
-    {
-        $methodName = self::lookupMethodFor($item, self::$dispatchTable);
-        return self::$methodName($item);
-    }
-
-    /**
-     * called when we have a data type we cannot support
-     *
-     * @param  mixed $item
+     * @param  mixed $container
+     *         the container that we want to remove data from
+     * @param  string $property
+     *         the data that we want to remove
      * @return void
      */
-    private static function nothingMatchesTheInputType($item)
+    public function __invoke(&$container, $property)
     {
-        throw new E4xx_UnsupportedType(SimpleType::from($item));
+        return self::from($container, $property);
     }
 
     /**
-     * our list of which method to call for which input data type
-     * @var array
+     * remove data from a container
+     *
+     * @param  mixed $container
+     *         the container that we want to remove data from
+     * @param  string $property
+     *         the data that we want to remove
+     * @return void
      */
+    public static function from(&$container, $property)
+    {
+        $method = self::lookupMethodFor($container, self::$dispatchTable);
+        self::$method($container, $property);
+    }
+
+    /**
+     * called when we're given a container that we cannot do anything with
+     *
+     * @return void
+     */
+    public static function nothingMatchesTheInputType($container)
+    {
+        throw new E4xx_UnsupportedType(SimpleType::from($container));
+    }
+
+    /**
+     * remove data from a container
+     *
+     * @param  array|ArrayObject $container
+     *         the container that we want to remove data from
+     * @param  string $property
+     *         the data that we want to remove
+     * @return void
+     */
+    private static function fromArray(&$container, $property)
+    {
+        if (isset($container[$property])) {
+            unset($container[$property]);
+        }
+    }
+
+    /**
+     * remove data from a container
+     *
+     * @param  object $container
+     *         the container that we want to remove data from
+     * @param  string $property
+     *         the data that we want to remove
+     * @return void
+     */
+    private static function fromObject($container, $property)
+    {
+        if (isset($container->{$property})) {
+            unset($container->{$property});
+        }
+    }
+
     private static $dispatchTable = [
         'Array' => 'fromArray',
+        'Assignable' => 'fromObject',
+        'Indexable' => 'fromArray',
         'Object' => 'fromObject',
     ];
 }

@@ -45,7 +45,8 @@
 namespace GanbaroDigital\DataContainers\Filters;
 
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
-use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
+use GanbaroDigital\Reflection\Requirements\RequireStringy;
+use GanbaroDigital\Reflection\Requirements\RequireInteger;
 
 class FilterDotNotationParts
 {
@@ -64,15 +65,12 @@ class FilterDotNotationParts
     public static function fromString($dotNotation, $start, $len)
     {
         // robustness!
-        if (!is_int($start)) {
-            throw new E4xx_UnsupportedType(gettype($start));
-        }
-        if (!is_int($len)) {
-            throw new E4xx_UnsupportedType(gettype($len));
-        }
+        RequireStringy::check($dotNotation, E4xx_UnsupportedType::class);
+        RequireInteger::check($start, E4xx_UnsupportedType::class);
+        RequireInteger::check($len, E4xx_UnsupportedType::class);
 
-        $parts = explode(".", $dotNotation);
-        $parts = array_slice($parts, $start, $len);
+        $parts = explode(".", (string)$dotNotation);
+        $parts = array_slice($parts, (int)$start, (int)$len);
         return implode(".", $parts);
     }
 
@@ -90,8 +88,7 @@ class FilterDotNotationParts
      */
     public static function from($dotNotation, $start, $len)
     {
-        $methodName = FirstMethodMatchingType::from($dotNotation, self::class, 'from', E4xx_UnsupportedType::class);
-        return self::$methodName($dotNotation, $start, $len);
+        return self::fromString($dotNotation, $start, $len);
     }
 
     /**

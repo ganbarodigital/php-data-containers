@@ -48,6 +48,7 @@ use GanbaroDigital\DataContainers\Checks\IsDotNotationPath;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_NotDotNotationPath;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
 use GanbaroDigital\Reflection\Requirements\RequireStringy;
+
 class RequireDotNotationPath
 {
     /**
@@ -67,7 +68,7 @@ class RequireDotNotationPath
         RequireStringy::check($path, $eUnsupportedType);
 
         // make sure the string contains a dot.notation.support path
-        if (!IsDotNotationPath::inString($path)) {
+        if (!IsDotNotationPath::checkString($path)) {
             throw new $eNotDotNotationPath($path);
         }
     }

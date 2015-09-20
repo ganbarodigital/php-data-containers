@@ -48,9 +48,11 @@ use ArrayIterator;
 use IteratorAggregate;
 use stdClass;
 use GanbaroDigital\DataContainers\Exceptions\E4xx_NoSuchProperty;
+use GanbaroDigital\DataContainers\Checks\HasUsingDotNotationPath;
 use GanbaroDigital\DataContainers\Checks\IsDotNotationPath;
+use GanbaroDigital\DataContainers\Editors\MergeUsingDotNotationPath;
+use GanbaroDigital\DataContainers\Editors\RemoveUsingDotNotationPath;
 use GanbaroDigital\DataContainers\Filters\FilterDotNotationPath;
-use GanbaroDigital\DataContainers\ValueBuilders\MergeUsingDotNotationPath;
 
 /**
  * The DataBag is based on the BaseObject that I built for Datasift's
@@ -76,7 +78,7 @@ class DataBag extends stdClass implements IteratorAggregate
     public function __get($propertyName)
     {
         // is the user trying to use dot.notation?
-        if (IsDotNotationPath::inString($propertyName)) {
+        if (IsDotNotationPath::checkString($propertyName)) {
             return FilterDotNotationPath::fromObject($this, $propertyName);
         }
 
@@ -100,7 +102,7 @@ class DataBag extends stdClass implements IteratorAggregate
     public function __set($propertyName, $propertyValue)
     {
         // is the user trying to use dot.notation?
-        if (IsDotNotationPath::inString($propertyName)) {
+        if (IsDotNotationPath::checkString($propertyName)) {
             return MergeUsingDotNotationPath::intoObject($this, $propertyName, $propertyValue, DataBag::class);
         }
 
@@ -108,6 +110,41 @@ class DataBag extends stdClass implements IteratorAggregate
         //
         // I hope that it does not recurse!
         $this->$propertyName = $propertyValue;
+    }
+
+    /**
+     * magic method, called when we want to know if a fake property exists
+     * or not
+     *
+     * if $propertyName is a dot.notation.support path, we'll attempt to
+     * follow it to find the stated property
+     *
+     * @param  string $propertyName
+     *         name of the property to search for
+     * @return boolean
+     *         TRUE if the property exists (or is emulated)
+     *         FALSE otherwise
+     */
+    public function __isset($propertyName)
+    {
+        // is the user trying to use dot.notation?
+        if (IsDotNotationPath::checkString($propertyName)) {
+            return HasUsingDotNotationPath::inObject($this, $propertyName);
+        }
+
+        // if we get here, the property does not exist
+        return false;
+    }
+
+    /**
+     * magic method, called when we want to delete a fake property
+     *
+     * @param string $propertyName
+     *        the property to remove
+     */
+    public function __unset($propertyName)
+    {
+        RemoveUsingDotNotationPath::from($this, $propertyName);
     }
 
     /**

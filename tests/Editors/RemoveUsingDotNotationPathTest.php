@@ -34,21 +34,22 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @category  Libraries
- * @package   DataContainers/Filters
+ * @package   DataContainers/Editors
  * @author    Stuart Herbert <stuherbert@ganbarodigital.com>
  * @copyright 2015-present Ganbaro Digital Ltd www.ganbarodigital.com
  * @license   http://www.opensource.org/licenses/bsd-license.php  BSD License
  * @link      http://code.ganbarodigital.com/php-data-containers
  */
 
-namespace GanbaroDigital\DataContainers\Filters;
+namespace GanbaroDigital\DataContainers\Editors;
 
 use PHPUnit_Framework_TestCase;
+use stdClass;
 
 /**
- * @coversDefaultClass GanbaroDigital\DataContainers\Filters\FilterDotNotationParts
+ * @coversDefaultClass GanbaroDigital\DataContainers\Editors\RemoveUsingDotNotationPath
  */
-class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
+class RemoveUsingDotNotationPathTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @coversNothing
@@ -58,158 +59,193 @@ class FilterDotNotationPartsTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // setup your test
 
-
-
         // ----------------------------------------------------------------
         // perform the change
 
-        $obj = new FilterDotNotationParts;
+        $obj = new RemoveUsingDotNotationPath();
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($obj instanceof FilterDotNotationParts);
+        $this->assertTrue($obj instanceof RemoveUsingDotNotationPath);
     }
 
     /**
      * @covers ::__invoke
      * @covers ::from
-     * @covers ::fromString
+     * @covers ::splitPathInTwo
+     * @dataProvider provideContainersToTest
      */
-    public function testCanUseAsObject()
+    public function testCanUseAsObject($container, $propertyName, $expectedResult)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $obj = new FilterDotNotationParts;
-        $expectedResult = 'dot.notation.support';
+        $obj = new RemoveUsingDotNotationPath;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = $obj('dot.notation.support', 0, 3);
+        $obj($container, $propertyName);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals($expectedResult, $container);
     }
 
     /**
      * @covers ::from
-     * @covers ::fromString
+     * @covers ::splitPathInTwo
+     * @dataProvider provideContainersToTest
      */
-    public function testCanCallStatically()
+    public function testCanCallStatically($container, $propertyName, $expectedResult)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $expectedResult = 'dot.notation.support';
-
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = FilterDotNotationParts::from($expectedResult, 0, 3);
+        RemoveUsingDotNotationPath::from($container, $propertyName);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals($expectedResult, $container);
     }
 
     /**
+     * @covers ::__invoke
      * @covers ::from
-     * @covers ::fromString
+     * @dataProvider provideArrayContainersToTest
      */
-    public function testCanGetStartOfPath()
+    public function testCanRemoveFromArray($container, $propertyName, $expectedResult)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $data = 'dot.notation.support';
-        $expectedResult = 'dot';
+        $obj = new RemoveUsingDotNotationPath;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = FilterDotNotationParts::from($data, 0, 1);
+        $obj($container, $propertyName);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals($expectedResult, $container);
     }
 
     /**
+     * @covers ::__invoke
      * @covers ::from
-     * @covers ::fromString
+     * @dataProvider provideObjectContainersToTest
      */
-    public function testCanGetEndOfPath()
+    public function testCanRemoveFromObject($container, $propertyName, $expectedResult)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-        $data = 'dot.notation.support';
-        $expectedResult = 'support';
+        $obj = new RemoveUsingDotNotationPath;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        $actualResult = FilterDotNotationParts::from($data, -1, 1);
+        $obj($container, $propertyName);
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertEquals($expectedResult, $actualResult);
+        $this->assertEquals($expectedResult, $container);
     }
 
     /**
      * @covers ::from
-     * @covers ::fromString
      * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
-     * @dataProvider provideNonIntegers
+     * @dataProvider provideNonIndexableNorAssignable
      */
-    public function testStartMustBeAnInteger($start)
+    public function testThrowsExceptionWhenContainerIsNotIndexableNorAssignable($container)
     {
         // ----------------------------------------------------------------
         // setup your test
 
-
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        FilterDotNotationParts::from('dot.notation.support', $start, 1);
-    }
-
-    /**
-     * @covers ::from
-     * @covers ::fromString
-     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
-     * @dataProvider provideNonIntegers
-     */
-    public function testLenMustBeAnInteger($len)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-
+        $obj = new RemoveUsingDotNotationPath;
+        $property = 100;
 
         // ----------------------------------------------------------------
         // perform the change
 
-        FilterDotNotationParts::from('dot.notation.support', 0, $len);
+        $obj($container, $property);
     }
 
-    public function provideNonIntegers()
+    public function provideNonIndexableNorAssignable()
     {
         return [
             [ null ],
             [ false ],
             [ true ],
-            [ [ ] ],
             [ 3.1415927 ],
-            [ new \stdClass ],
+            [ 100 ],
+            [ STDIN ],
+            [ "traverse me!" ],
+        ];
+    }
+
+    public function provideContainersToTest()
+    {
+        return array_merge(
+            $this->provideArrayContainersToTest(),
+            $this->provideObjectContainersToTest()
+        );
+    }
+
+    public function getArrayContainer()
+    {
+        $arrContainer = [
+            "one" => 1,
+            "two" => 2,
+            "three" => [ 1, 2, 3 => [ 4, 5, 6 ]],
+            "four" => (object) [ "fred" => (object)[ "harry" => "alice", "william" => "kate" ]],
+        ];
+        return $arrContainer;
+    }
+
+    public function provideArrayContainersToTest()
+    {
+        $arrContainer1a = $this->getArrayContainer();
+        $arrContainer1b = $this->getArrayContainer();
+        unset($arrContainer1b['three'][0]);
+
+        $arrContainer2a = $this->getArrayContainer();
+        $arrContainer2b = $this->getArrayContainer();
+        unset($arrContainer2b['three'][1]);
+
+        $arrContainer3a = $this->getArrayContainer();
+        $arrContainer3b = $this->getArrayContainer();
+        unset($arrContainer3b['three'][3]);
+
+        return [
+            [ $arrContainer1a, 'three.0', $arrContainer1b ],
+            [ $arrContainer2a, 'three.1', $arrContainer2b ],
+            [ $arrContainer3a, 'three.3', $arrContainer3b ],
+        ];
+    }
+
+    public function provideObjectContainersToTest()
+    {
+        $objContainer1a = (object)$this->getArrayContainer();
+        $objContainer1b = (object)$this->getArrayContainer();
+        unset($objContainer1b->four->fred->harry);
+
+        $objContainer2a = (object)$this->getArrayContainer();
+        $objContainer2b = (object)$this->getArrayContainer();
+        unset($objContainer2b->four->fred->william);
+
+        return [
+            [ $objContainer1a, 'four.fred.harry', $objContainer1b ],
+            [ $objContainer2b, 'four.fred.william', $objContainer2b ],
         ];
     }
 }
