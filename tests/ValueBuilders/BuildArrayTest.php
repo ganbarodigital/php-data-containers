@@ -199,7 +199,7 @@ class BuildArrayTest extends PHPUnit_Framework_TestCase
             ],
             [
                 [ "fred" => [ 1 => 2], "harry" => $dataBag ],
-                [ "fred" => [ 1 => 2], "harry" => [ "value1" => $popo ] ]
+                [ "fred" => [ 1 => 2], "harry" => [ "value1" => [ "fish" => "trout" ] ] ]
             ]
         ];
     }
@@ -251,7 +251,7 @@ class BuildArrayTest extends PHPUnit_Framework_TestCase
         return [
             [
                 $dataBag1,
-                [ "value1" => $popo ],
+                [ "value1" => [ "fish" => "trout" ] ],
             ]
         ];
     }

@@ -2,7 +2,9 @@
 
 ## develop branch
 
-Nothing yet.
+### Fixes
+
+* `ValueBuilders\BuildArray` - handle deep conversion of `stdClass`
 
 ## 2.4.0 - Thu Dec 17 2015
 
