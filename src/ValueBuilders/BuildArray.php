@@ -45,6 +45,7 @@
 namespace GanbaroDigital\DataContainers\ValueBuilders;
 
 use GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType;
+use GanbaroDigital\Reflection\Checks\IsTraversable;
 use GanbaroDigital\Reflection\ValueBuilders\LookupMethodByType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 use Traversable;
@@ -94,7 +95,7 @@ class BuildArray
 
         // walk the array
         foreach ($data as $key => $value) {
-            if ($value instanceof Traversable || is_array($value)) {
+            if (IsTraversable::check($value)) {
                 // array, object - deep copy required
                 $retval[$key] = self::from($value);
             }

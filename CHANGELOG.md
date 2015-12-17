@@ -4,6 +4,12 @@
 
 Nothing yet.
 
+## 2.4.1 - Thu Dec 17 2015
+
+### Fixes
+
+* `ValueBuilders\BuildArray` - handle deep conversion of `stdClass`
+
 ## 2.4.0 - Thu Dec 17 2015
 
 ### New
