@@ -4,6 +4,12 @@
 
 Nothing yet.
 
+## 2.4.0 - Thu Dec 17 2015
+
+### New
+
+* `ValueBuilders\BuildArray` added - do deep conversion
+
 ## 2.3.0 - Sun Sep 20 2015
 
 ### Deprecated
