@@ -60,7 +60,7 @@ use GanbaroDigital\DataContainers\Filters\FilterDotNotationPath;
  *
  * It's essentially a stdClass-on-steroids.
  */
-class DataBag extends stdClass implements IteratorAggregate
+class DataBag extends stdClass implements DataContainer
 {
     /**
      * magic method, called when there's an attempt to get a property

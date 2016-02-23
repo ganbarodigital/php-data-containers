@@ -2,7 +2,12 @@
 
 ## develop branch
 
-Nothing yet.
+## New
+
+* Added interfaces to represent a read-write data container, and a read-only data container
+  - Added `Containers\DataContainer` - read-write data container
+  - Added `Containers\ReadOnlyDataContainer` - read-only data container
+* `DataBag` is now a `DataContainer` too
 
 ## 2.4.1 - Thu Dec 17 2015
 
