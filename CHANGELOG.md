@@ -2,6 +2,10 @@
 
 ## develop branch
 
+Nothing yet.
+
+## 2.5.2 - Wed Nov 2 2016
+
 ### Fixes
 
 * Merging into a child array (where the parent is an object) was broken in 2.5.1
