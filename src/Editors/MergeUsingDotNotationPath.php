@@ -117,7 +117,7 @@ class MergeUsingDotNotationPath
         // find the point where we want to merge
         list ($firstPart, $finalPart) = self::splitPathInTwo($path);
         if ($firstPart !== null) {
-            $leaf = DescendDotNotationPath::intoObject($obj, $firstPart, $extendingItem);
+            $leaf =& DescendDotNotationPath::intoObject($obj, $firstPart, $extendingItem);
         }
         else {
             $leaf = $obj;
