@@ -2,6 +2,10 @@
 
 ## develop branch
 
+Nothing yet.
+
+## 2.5.1 - Wed Nov 2 2016
+
 ### Fixes
 
 * dot.notation.path no longer has to contain a dot
