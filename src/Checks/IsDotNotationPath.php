@@ -168,7 +168,7 @@ class IsDotNotationPath
 
         // do we even have one?
         if (false === $firstDot) {
-            return false;
+            return true;
         }
 
         // can't be at the end of the string

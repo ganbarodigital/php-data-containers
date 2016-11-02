@@ -2,6 +2,11 @@
 
 ## develop branch
 
+### Fixes
+
+* dot.notation.path no longer has to contain a dot
+  - updated `IsDotNotationPath` check
+
 ## 2.5.0 - Tue Feb 23 2016
 
 ### New
