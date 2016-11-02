@@ -125,14 +125,14 @@ class IsDotNotationPathTest extends PHPUnit_Framework_TestCase
         // ----------------------------------------------------------------
         // perform the change
 
-        $IsDotNotationPath = IsDotNotationPath::check('dot.notation.support');
-        $isNotDotNotation = IsDotNotationPath::check('dotNotationSupport');
+        $isDotNotationPath = IsDotNotationPath::check('dot.notation.support');
+        $isAlsoDotNotation = IsDotNotationPath::check('dotNotationSupport');
 
         // ----------------------------------------------------------------
         // test the results
 
-        $this->assertTrue($IsDotNotationPath);
-        $this->assertFalse($isNotDotNotation);
+        $this->assertTrue($isDotNotationPath);
+        $this->assertTrue($isAlsoDotNotation);
     }
 
     /**

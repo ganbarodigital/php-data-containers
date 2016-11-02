@@ -82,7 +82,13 @@ class MergeUsingDotNotationPath
 
         // find the point where we want to merge
         list ($firstPart, $finalPart) = self::splitPathInTwo($path);
-        $leaf =& DescendDotNotationPath::intoArray($arr, $firstPart, $extendingItem);
+        if ($firstPart !== null) {
+            $leaf =& DescendDotNotationPath::intoArray($arr, $firstPart, $extendingItem);
+        }
+        else {
+            $leaf =& $arr;
+        }
+
         // merge it
         MergeIntoProperty::of($leaf, $finalPart, $value);
     }
@@ -110,7 +116,12 @@ class MergeUsingDotNotationPath
 
         // find the point where we want to merge
         list ($firstPart, $finalPart) = self::splitPathInTwo($path);
-        $leaf =& DescendDotNotationPath::intoObject($obj, $firstPart, $extendingItem);
+        if ($firstPart !== null) {
+            $leaf = DescendDotNotationPath::intoObject($obj, $firstPart, $extendingItem);
+        }
+        else {
+            $leaf = $obj;
+        }
 
         // merge it
         MergeIntoProperty::of($leaf, $finalPart, $value);
@@ -201,6 +212,15 @@ class MergeUsingDotNotationPath
         $firstPart = FilterDotNotationParts::fromString($path, 0, -1);
         $finalPart = FilterDotNotationParts::fromString($path, -1, 1);
 
+        // what do we have?
+        // var_dump("path", $path, "firstPart", $firstPart, "finalPart", $finalPart);
+
+        // special case - we're already at the end of the path
+        if (strlen($firstPart) === 0) {
+            return [ null, $finalPart ];
+        }
+
+        // general case - we're not at the end of the path
         return [ $firstPart, $finalPart ];
     }
 }

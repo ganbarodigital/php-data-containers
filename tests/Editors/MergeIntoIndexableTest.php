@@ -395,20 +395,26 @@ class MergeIntoIndexableTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers ::from
-     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_UnsupportedType
      * @dataProvider provideUnsupportedTypes
      */
-    public function testStaticCallThrowsExceptionWhenUnsupportedTypeProvidedAsSecondArg($theirs)
+    public function testStaticCallAppendsEverythingElseToArray($theirs)
     {
         // ----------------------------------------------------------------
         // setup your test
 
         $data = [];
+        $expectedResult = [];
+        $expectedResult[] = $theirs;
 
         // ----------------------------------------------------------------
         // perform the change
 
         MergeIntoIndexable::from($data, $theirs);
+
+        // ----------------------------------------------------------------
+        // test the results
+
+        $this->assertEquals($expectedResult, $data);
     }
 
     public function provideUnsupportedTypes()
