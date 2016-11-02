@@ -152,40 +152,6 @@ class RequireDotNotationPathTest extends PHPUnit_Framework_TestCase
         RequireDotNotationPath::check($item);
     }
 
-    /**
-     * @covers ::__invoke
-     * @dataProvider provideNonDotNotationPaths
-     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NotDotNotationPath
-     */
-    public function testRejectsNonDotNotationPathsWhenUsedAsObject($item)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        $obj = new RequireDotNotationPath;
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        $obj($item);
-    }
-
-    /**
-     * @covers ::check
-     * @dataProvider provideNonDotNotationPaths
-     * @expectedException GanbaroDigital\DataContainers\Exceptions\E4xx_NotDotNotationPath
-     */
-    public function testRejectsNonDotNotationPathsWhenCalledStatically($item)
-    {
-        // ----------------------------------------------------------------
-        // setup your test
-
-        // ----------------------------------------------------------------
-        // perform the change
-
-        RequireDotNotationPath::check($item);
-    }
-
     public function provideDotNotationPaths()
     {
         return [

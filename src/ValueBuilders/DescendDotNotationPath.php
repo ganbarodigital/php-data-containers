@@ -54,6 +54,7 @@ use GanbaroDigital\Reflection\Checks\IsIndexable;
 use GanbaroDigital\Reflection\Checks\IsTraversable;
 use GanbaroDigital\Reflection\Requirements\RequireAssignable;
 use GanbaroDigital\Reflection\Requirements\RequireIndexable;
+use GanbaroDigital\Reflection\Requirements\RequireStringy;
 use GanbaroDigital\Reflection\ValueBuilders\FirstMethodMatchingType;
 use GanbaroDigital\Reflection\ValueBuilders\SimpleType;
 
@@ -96,6 +97,10 @@ class DescendDotNotationPath
     {
         // robustness!
         RequireAssignable::check($obj, E4xx_UnsupportedType::class);
+        RequireStringy::check($property, E4xx_UnsupportedType::class);
+        if (strlen($property) === 0) {
+            throw new \InvalidArgumentException("'\$property' cannot be empty string");
+        }
 
         $retval =& self::getPathFromRoot($obj, $property, $extendingItem);
         return $retval;
@@ -267,7 +272,7 @@ class DescendDotNotationPath
      */
     private static function &getPartFromArray(&$arr, $part, $extendingItem = null)
     {
-        if (isset($arr[$part])) {
+        if (array_key_exists($part, $arr)) {
             return $arr[$part];
         }
 

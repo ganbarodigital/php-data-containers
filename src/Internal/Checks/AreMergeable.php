@@ -66,8 +66,8 @@ class AreMergeable
      */
     public static function into($ours, $theirs)
     {
-        // if we can't traverse over theirs, no good
-        if (!IsTraversable::check($theirs)) {
+        // we can't merge non-arrays, non-objects
+        if (!IsTraversable::check($theirs) && !IsAssignable::check($theirs)) {
             return false;
         }
 

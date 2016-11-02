@@ -223,6 +223,7 @@ class ShouldOverwriteTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($actualResult);
     }
+    
     /**
      * @covers ::__invoke
      * @covers ::into

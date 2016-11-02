@@ -146,8 +146,8 @@ class MergeIntoIndexable
             return self::fromArray($ours, $theirs);
         }
 
-        // cannot merge anything that reaches here!
-        throw new E4xx_UnsupportedType(SimpleType::from($ours));
+        // at this point, we want to append onto the end of $ours
+        $ours[] = $theirs;
     }
 
     /**

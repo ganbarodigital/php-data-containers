@@ -6,6 +6,7 @@
 
 * dot.notation.path no longer has to contain a dot
   - updated `IsDotNotationPath` check
+* the dot.notation.path classes now support appending to arrays on their own
 
 ## 2.5.0 - Tue Feb 23 2016
 
