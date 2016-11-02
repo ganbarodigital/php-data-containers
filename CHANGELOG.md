@@ -2,7 +2,9 @@
 
 ## develop branch
 
-## New
+## 2.5.0 - Tue Feb 23 2016
+
+### New
 
 * Added interfaces to represent a read-write data container, and a read-only data container
   - Added `Containers\DataContainer` - read-write data container
